@@ -233,7 +233,7 @@
             <div class="panel">
 
                 <div class="page-content settings container-fluid">
-                    <ul class="nav nav-tabs">
+                    <ul class="nav nav-tabs" style="box-shadow: initial">
                         @foreach($settings as $group => $setting)
                             <li @if($group == $active) class="active" @endif>
                                 <a data-toggle="tab" href="#{{ str_slug($group) }}">{{ $group }}</a>

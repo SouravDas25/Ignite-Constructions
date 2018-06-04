@@ -5,7 +5,7 @@
                 <span class="hamburger-inner"></span>
             </button>
             @section('breadcrumbs')
-            <ol class="breadcrumb hidden-xs">
+            <ol class="breadcrumb hidden-xs" style="margin-top: 10px !important">
                 @if(count(Request::segments()) == 1)
                     <li class="active"><i class="voyager-boat"></i> {{ __('voyager::generic.dashboard') }}</li>
                 @else
@@ -32,10 +32,12 @@
             @show
         </div>
         <ul class="nav navbar-nav @if (config('voyager.multilingual.rtl')) navbar-left @else navbar-right @endif">
-            <li class="dropdown profile">
+            <li class="dropdown profile" style="border: 0">
                 <a href="#" class="dropdown-toggle text-right" data-toggle="dropdown" role="button"
-                   aria-expanded="false"><img src="{{ $user_avatar }}" class="profile-img"> <span
-                            class="caret"></span></a>
+                   aria-expanded="false">
+                    <img src="{{ $user_avatar }}" class="profile-img">
+                    <span class="caret"></span>
+                </a>
                 <ul class="dropdown-menu dropdown-menu-animated">
                     <li class="profile-img">
                         <img src="{{ $user_avatar }}" class="profile-img">

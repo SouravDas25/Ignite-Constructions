@@ -17,21 +17,21 @@
     </td>
 
     <td>
-        <input v-model="column.notnull" type="checkbox">
+        <input v-model="column.notnull" type="checkbox" style="position: initial; visibility : initial;">
     </td>
 
     <td>
-        <input v-model="column.unsigned" type="checkbox">
+        <input v-model="column.unsigned" type="checkbox" style="position: initial; visibility : initial;">
     </td>
 
     <td>
-        <input v-model="column.autoincrement" type="checkbox">
+        <input v-model="column.autoincrement" type="checkbox" style="position: initial; visibility : initial;">
     </td>
 
     <td>
         <select :value="index.type" @change="onIndexTypeChange"
                 :disabled="column.type.notSupportIndex"
-                class="form-control">
+                class="form-control browser-default">
             <option value=""></option>
             <option value="INDEX">{{ __('voyager::database.index') }}</option>
             <option value="UNIQUE">{{ __('voyager::database.unique') }}</option>
