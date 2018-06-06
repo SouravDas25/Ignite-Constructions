@@ -6,7 +6,7 @@
     </td>
 
     <td>
-        <database-types
+        <database-types class="browser-default"
             :column="column"
             @typeChanged="onColumnTypeChange">
         </database-types>
