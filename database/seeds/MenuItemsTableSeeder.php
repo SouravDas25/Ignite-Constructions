@@ -160,6 +160,22 @@ class MenuItemsTableSeeder extends Seeder
 
         $menuItem = MenuItem::firstOrNew([
             'menu_id' => $menu->id,
+            'title'   => 'Api Builder',
+            'url'     => '',
+            'route'   => 'voyager.api.builder.index',
+        ]);
+        if (!$menuItem->exists) {
+            $menuItem->fill([
+                'target'     => '_self',
+                'icon_class' => 'fa fa-cloud',
+                'color'      => null,
+                'parent_id'  => $toolsMenuItem->id,
+                'order'      => 14,
+            ])->save();
+        }
+
+        $menuItem = MenuItem::firstOrNew([
+            'menu_id' => $menu->id,
             'title'   => __('voyager::seeders.menu_items.settings'),
             'url'     => '',
             'route'   => 'voyager.settings.index',
@@ -170,7 +186,7 @@ class MenuItemsTableSeeder extends Seeder
                 'icon_class' => 'voyager-settings',
                 'color'      => null,
                 'parent_id'  => null,
-                'order'      => 14,
+                'order'      => 15,
             ])->save();
         }
     }
