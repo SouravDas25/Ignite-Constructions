@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "3270eb2add8ebcdd1bcbc92da2ea6361",
@@ -2339,16 +2339,16 @@
         },
         {
             "name": "sd25/voyager",
-            "version": "v1.2.2",
+            "version": "v1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SouravDas25/voyager.git",
-                "reference": "a2b2e52c26c85cdde8f32ce461c02f7a68964110"
+                "reference": "2ab7c0895e70dfd4d85940ed9893e7a2de0056bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SouravDas25/voyager/zipball/a2b2e52c26c85cdde8f32ce461c02f7a68964110",
-                "reference": "a2b2e52c26c85cdde8f32ce461c02f7a68964110",
+                "url": "https://api.github.com/repos/SouravDas25/voyager/zipball/2ab7c0895e70dfd4d85940ed9893e7a2de0056bf",
+                "reference": "2ab7c0895e70dfd4d85940ed9893e7a2de0056bf",
                 "shasum": ""
             },
             "require": {
@@ -2402,7 +2402,7 @@
                 "laravel",
                 "panel"
             ],
-            "time": "2018-06-28T12:03:16+00:00"
+            "time": "2018-06-28T15:16:47+00:00"
         },
         {
             "name": "seld/cli-prompt",
