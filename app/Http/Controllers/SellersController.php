@@ -14,52 +14,33 @@ use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
 use App\Purchase;
 use App\Good;
+use App\Seller;
 
 
 class SellersController extends VoyagerBaseController
 {
     public function show(Request $request, $id)
     {
-        $slug = $this->getSlug($request);
+        $seller=Seller::findOrFail($id);
 
-        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+        $badges = Purchase::where('seller_id','=', $id)->groupBy('goods_id')->get();
 
-        $relationships = $this->getRelationships($dataType);
-        if (strlen($dataType->model_name) != 0) {
-            $model = app($dataType->model_name);
-            $dataTypeContent = call_user_func([$model->with($relationships), 'findOrFail'], $id);
-        } else {
-            // If Model doest exist, get data from table name
-            $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+        $colorArray=['red','pink','purple','deep-purple','indigo','blue','light-blue','cyan','teal','green','light-green','lime','yellow','amber','orange','deep-orange','brown','grey','blue-grey'];
+
+        return view('vendor.voyager.sellers.read', compact('seller','badges','colorArray'));
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        $seller = Seller::findOrFail($id);
+        $purchaseCount = Purchase::where('seller_id','=',$id)->count();
+        if($purchaseCount < 1) {
+            $seller->delete();
+            $this->alertSuccess('Seller Deleted');
         }
-
-        // Replace relationships' keys for labels and create READ links if a slug is provided.
-        $dataTypeContent = $this->resolveRelations($dataTypeContent, $dataType, true);
-
-        // If a column has a relationship associated with it, we do not want to show that field
-        $this->removeRelationshipField($dataType, 'read');
-
-        // Check permission
-        $this->authorize('read', $dataTypeContent);
-
-        // Check if BREAD is Translatable
-        $isModelTranslatable = is_bread_translatable($dataTypeContent);
-
-        $view = 'voyager::bread.read';
-
-        if (view()->exists("voyager::$slug.read")) {
-            $view = "voyager::$slug.read";
+        else {
+            $this->alertError('Purchase Containes This Seller, Delete Denied.');
         }
-
-        $purchase=Purchase::where('id','=', $id)->get();
-
-        $a=Purchase::where('id','=', $id)->pluck('goods_id');
-
-        if(count($a)>0){
-            foreach($a as $goods_id)
-                $goods=Good::where('id','=', $goods_id)->get();
-        }
-       
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'purchase', 'goods'));
+        return redirect()->route('voyager.sellers.index');
     }
 }
