@@ -2339,16 +2339,16 @@
         },
         {
             "name": "sd25/voyager",
-            "version": "v1.2.2",
+            "version": "v1.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SouravDas25/voyager.git",
-                "reference": "a2b2e52c26c85cdde8f32ce461c02f7a68964110"
+                "reference": "36408b6cf8cdbcbc1e0be1639c00ce06c719e636"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SouravDas25/voyager/zipball/a2b2e52c26c85cdde8f32ce461c02f7a68964110",
-                "reference": "a2b2e52c26c85cdde8f32ce461c02f7a68964110",
+                "url": "https://api.github.com/repos/SouravDas25/voyager/zipball/36408b6cf8cdbcbc1e0be1639c00ce06c719e636",
+                "reference": "36408b6cf8cdbcbc1e0be1639c00ce06c719e636",
                 "shasum": ""
             },
             "require": {
@@ -2402,7 +2402,7 @@
                 "laravel",
                 "panel"
             ],
-            "time": "2018-06-28T12:03:16+00:00"
+            "time": "2018-06-29T17:25:28+00:00"
         },
         {
             "name": "seld/cli-prompt",
