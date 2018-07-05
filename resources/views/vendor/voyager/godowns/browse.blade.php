@@ -100,6 +100,7 @@
                                             @endif
                                         </th>
                                         @endforeach
+                                        <th>Purchases</th>
                                         <th class="actions text-right">{{ __('voyager::generic.actions') }}</th>
                                     </tr>
                                 </thead>
@@ -200,6 +201,14 @@
                                                 @endif
                                             </td>
                                         @endforeach
+
+                                        <td>
+                                            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                                <a type="button" href="{{route('voyager.godowns.incoming',$data->id)}}" class="btn btn-sm btn-success hoverable waves-effect waves-light"><i class="icon-download"></i> Incoming</a>
+                                                <a type="button" href="{{route('voyager.godowns.outgoing',$data->id)}}" class="btn btn-sm btn-yellow hoverable waves-effect waves-light"><i class="icon-upload"></i> Outgoing</a>
+                                            </div>
+                                        </td>
+
                                         <td class="no-sort no-click" id="bread-actions">
                                             @foreach(Voyager::actions() as $action)
                                                 @include('voyager::bread.partials.actions', ['action' => $action])

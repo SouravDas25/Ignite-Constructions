@@ -22,7 +22,7 @@
                 <div class="panel panel-bordered">
                     <!-- form start -->
                     <form role="form"
-                            class="form-edit-add pr-3 pl-3"
+                            class="form-edit-add pr-3 pl-3" id="myForm"
                             action="{{ (isset($purchase->id)) ? route('voyager.purchases.update', $purchase->id) : route('voyager.purchases.store') }}"
                             method="POST" enctype="multipart/form-data">
                         <!-- PUT Method if we are editing -->
@@ -109,8 +109,9 @@
 
                         </div><!-- panel-body -->
 
+                        <input type="hidden" name="QS_godowns" id="QS_godowns">
                         <div class="panel-footer form-group">
-                            <button type="submit" class="btn btn-info hoverable waves-effect waves-light save"><i class="icon-flash"></i> {{__('voyager::generic.save') }}</button>
+                            <button type="submit" onclick="SubMitForm()" class="btn btn-info hoverable waves-effect waves-light save"><i class="icon-flash"></i> {{__('voyager::generic.save') }}</button>
                         </div>
                     </form>
                 </div>
@@ -141,9 +142,9 @@
                             <div class="col-sm-8">
                                 <select class="mdb-select" id="QS_GODOWN_NAME">
                                     <option value="" disabled selected>Choose your option</option>
-                                    <option value="1">Godown 1</option>
-                                    <option value="2">Godown 2</option>
-                                    <option value="3">Godown 3</option>
+                                    @foreach($godowns as $godown)
+                                        <option value="{{ $godown->id }}">{{ $godown->name }}</option>
+                                    @endforeach
                                 </select>
                                 <label>Select A Godown</label>
                             </div>
@@ -217,6 +218,9 @@
         {
             //alert('HOLL');
             var qty = $('#QS_QTY_'+id).val();
+            if(qty.length < 1) qty = 0;
+            qty = parseFloat(qty);
+            //console.log(qty);
             if(qty > ModelGodowns[id].qty + Quantity.rem){
                 toastr['error']('Quantity Limit Exceeded');
                 $('#QS_QTY_'+id).val("");
@@ -230,6 +234,8 @@
 
         function removeGodown(id) {
             var qty = $('#QS_QTY_'+id).val();
+            if(qty.length < 1) qty = 0;
+            qty = parseFloat(qty);
             Quantity.rem += parseFloat(qty);
             $('#_tr_'+id).remove();
             delete ModelGodowns[id];
@@ -266,6 +272,17 @@
                     $('#QS_DisplayTABLE').append(html);
                 }
             }
+        }
+
+        function SubMitForm()
+        {
+            if(Object.keys(ModelGodowns).length < 1) {
+                toastr['error']('Please Distrubute Your Resources Among Godowns');
+                return false;
+            }
+            var value = JSON.stringify(ModelGodowns);
+            $('#QS_godowns').val(value);
+            $('#myForm').submit();
         }
 
         $('document').ready(function () 
