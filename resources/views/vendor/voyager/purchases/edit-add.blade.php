@@ -22,16 +22,16 @@
                 <div class="panel panel-bordered">
                     <!-- form start -->
                     <form role="form"
-                            class="form-edit-add pr-3 pl-3"
-                            action="{{ (isset($purchase->id)) ? route('voyager.purchases.update', $purchase->id) : route('voyager.purchases.store') }}"
-                            method="POST" enctype="multipart/form-data">
+                          class="form-edit-add pr-3 pl-3"
+                          action="{{ (isset($purchase->id)) ? route('voyager.purchases.update', $purchase->id) : route('voyager.purchases.store') }}"
+                          method="POST" enctype="multipart/form-data">
                         <!-- PUT Method if we are editing -->
-                        
-                        @if(isset($purchase->id))
-                            {{ method_field("PUT") }}
-                        @endif
 
-                        <!-- CSRF TOKEN -->
+                    @if(isset($purchase->id))
+                        {{ method_field("PUT") }}
+                    @endif
+
+                    <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
 
                         <div class="panel-body">
@@ -44,13 +44,15 @@
                                         @endforeach
                                     </ul>
                                 </div>
-                            @endif
+                        @endif
 
-                            <!-- Adding / Editing -->
-                            
+                        <!-- Adding / Editing -->
+
                             <div class="md-form">
-                                <select class="colorful-select dropdown-primary mdb-select" id="goods_id" name="goods_id">
-                                    <option value="@if(isset($purchase->id)){{ $purchase->goods_id }}@endif" selected disabled>{{ (isset($purchase->id) ? $purchase->goods->name : 'Choose an Option')}}</option>
+                                <select class="colorful-select dropdown-primary mdb-select" id="goods_id"
+                                        name="goods_id">
+                                    <option value="@if(isset($purchase->id)){{ $purchase->goods_id }}@endif" selected
+                                            disabled>{{ (isset($purchase->id) ? $purchase->goods->name : 'Choose an Option')}}</option>
                                     @foreach($goods as $good)
                                         <option value="{{ $good->id }}">{{ $good->name }}</option>
                                     @endforeach
@@ -60,12 +62,15 @@
 
                             <div class="form-group">
                                 <label for="quantity">Quantity</label>
-                                <input type="number" id="quantity" name="quantity" class="form-control" value="@if(isset($purchase->id)){{ $purchase->quantity }}@endif">
+                                <input type="number" id="quantity" name="quantity" class="form-control" onkeyup="UpdateQABTN()"
+                                       value="@if(isset($purchase->id)){{ $purchase->quantity }}@endif">
                             </div>
 
                             <div class="md-form">
-                                <select class="colorful-select dropdown-primary mdb-select" id="seller_id" name="seller_id">
-                                    <option value="@if(isset($purchase->id)){{ $purchase->seller_id }}@endif" selected disabled>{{ (isset($purchase->id)) ? $purchase->sellers->name : 'Choose an Option'}}</option>
+                                <select class="colorful-select dropdown-primary mdb-select" id="seller_id"
+                                        name="seller_id">
+                                    <option value="@if(isset($purchase->id)){{ $purchase->seller_id }}@endif" selected
+                                            disabled>{{ (isset($purchase->id)) ? $purchase->sellers->name : 'Choose an Option'}}</option>
                                     @foreach($sellers as $seller)
                                         <option value="{{ $seller->id }}">{{ $seller->name }}</option>
                                     @endforeach
@@ -75,31 +80,36 @@
 
                             <div class="form-group">
                                 <label for="cost">Cost</label>
-                                <input type="number" id="cost" name="cost" class="form-control" value="@if(isset($purchase->id)){{ $purchase->cost }}@endif">
+                                <input type="number" id="cost" name="cost" class="form-control"
+                                       value="@if(isset($purchase->id)){{ $purchase->cost }}@endif">
                             </div>
 
                             <div class="form-group">
                                 <label for="date">Date</label>
-                                <input type="date" id="date" name="date" class="form-control" value="@if(isset($purchase->id)){{ $purchase->date }}@endif">
+                                <input type="date" id="date" name="date" class="form-control"
+                                       value="@if(isset($purchase->id)){{ $purchase->date }}@endif">
                             </div>
 
                             <div class="form-group">
                                 <label for="purchase_due">Purchase Due</label>
-                                <input type="number" id="purchase_due" name="purchase_due" class="form-control" value="@if(isset($purchase->id)){{ $purchase->purchase_due }}@endif">
+                                <input type="number" id="purchase_due" name="purchase_due" class="form-control"
+                                       value="@if(isset($purchase->id)){{ $purchase->purchase_due }}@endif">
                             </div>
 
                             <div class="pb-4">
-                                <button type="button" class="btn hoverable btn-success waves-effect waves-light" data-toggle="modal" data-target="#quantitySharing">
-                                    <i class="icon-shuffle-1"></i> Quantity Sharing
+                                <button type="button" id="QuantityAllocationBTN" class="btn hoverable  disabled btn-flat btn-success waves-effect waves-light"
+                                        data-toggle="modal" data-target="#quantitySharing">
+                                    <i class="icon-shuffle-1"></i> Quantity Allocation
                                 </button>
-                                <i class="icon-question-circle-o" data-toggle="tooltip" data-placement="right" title="Share the goods quantity godown wise"></i>
-                            </div>  
+                                <i class="icon-question-circle-o" data-toggle="tooltip" data-placement="right"
+                                   title="Allocate the goods quantity godown wise"></i>
+                            </div>
 
                             <div class="form-group col-md-12 pb-4">
                                 <table class="table table-hover table-sm">
                                     <thead>
-                                        <th>Godowns</th>
-                                        <th>Quantity</th>
+                                    <th>Godowns</th>
+                                    <th>Quantity</th>
                                     </thead>
                                     <tbody id="QS_DisplayTABLE">
 
@@ -110,7 +120,9 @@
                         </div><!-- panel-body -->
 
                         <div class="panel-footer form-group">
-                            <button type="submit" class="btn btn-info hoverable waves-effect waves-light save"><i class="icon-flash"></i> {{__('voyager::generic.save') }}</button>
+                            <button type="submit" class="btn btn-info hoverable waves-effect waves-light save">
+                                <i class="icon-flash"></i> {{__('voyager::generic.save') }}
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -118,56 +130,71 @@
         </div>
     </div>
 
-    <div class="modal fade" id="quantitySharing" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;"aria-hidden="true">
+    <div class="modal fade" id="quantitySharing" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Quantity Allocation</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" class="white-text">&times;</span>
-                        </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
-                    <div class="container">
+                    <div class="container" id="VueApp">
                         <div class="row">
                             <div class="col-sm-6">
-                                Total Quantity - <span id="QS_TOTALQ"></span> kg
+                                Total Quantity - @{{ quantity }} kg
                             </div>
-                            <div class="col-sm-6">
-                                Remaining Quantity - <span id="QS_REMQ"></span> kg
+                            <div class="col-sm-6" v-bind:class="{ 'text-danger' : remaining < 0 }">
+                                Remaining Quantity - @{{ remaining }} kg
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-8">
-                                <select class="mdb-select" id="QS_GODOWN_NAME">
-                                    <option value="" disabled selected>Choose your option</option>
-                                    <option value="1">Godown 1</option>
-                                    <option value="2">Godown 2</option>
-                                    <option value="3">Godown 3</option>
+                                <select class="mdb-select" id="QS_GODOWN_NAME" >
+                                    <option value="-1" disabled selected>Choose your option</option>
+                                    <option v-for="item in godowns" v-bind:value="item.val">
+                                        @{{ item.text }}
+                                    </option>
                                 </select>
                                 <label>Select A Godown</label>
                             </div>
                             <div class="col-sm-4">
-                                <button class="btn btn-success" onclick="AddGodownToModal()" type="button">
+                                <button class="btn btn-success" v-on:click="addGodown" type="button">
                                     Add
                                 </button>
                             </div>
                             <table class="table table-hover table-sm">
                                 <thead>
-                                    <th>Godowns</th>
-                                    <th>Quantity</th>
-                                    <th>Action</th>
+                                <th>Godowns</th>
+                                <th>Quantity</th>
+                                <th>Action</th>
                                 </thead>
                                 <tbody id="QS_TABLE">
-
+                                <tr v-for="item in allocation">
+                                    <td> @{{ item.name }}</td>
+                                    <td> <input v-model.number="item.qty"> </td>
+                                    <td>
+                                        <button :data-index="item.id"
+                                                class="btn btn-danger hoverable waves-effect waves-light"
+                                                type="button" v-on:click="removeGodown">
+                                            <i class="icon-trash-empty"></i>
+                                            Remove
+                                        </button>
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary waves-effect waves-light" data-dismiss="modal">Close</button>
-                    <button type="button" data-dismiss="modal" onclick="submitQSModal()" class="btn btn-primary waves-effect waves-light">
+                    <button type="button" class="btn btn-secondary waves-effect waves-light" data-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="button" data-dismiss="modal" onclick="submitQSModal()"
+                            class="btn btn-primary waves-effect waves-light">
                         Save changes
                     </button>
                 </div>
@@ -181,17 +208,23 @@
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"
-                            aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="voyager-warning"></i> {{ __('voyager::generic.are_you_sure') }}</h4>
+                            aria-hidden="true">&times;
+                    </button>
+                    <h4 class="modal-title"><i class="voyager-warning"></i> {{ __('voyager::generic.are_you_sure') }}
+                    </h4>
                 </div>
 
                 <div class="modal-body">
-                    <h4>{{ __('voyager::generic.are_you_sure_delete') }} '<span class="confirm_delete_name"></span>'</h4>
+                    <h4>{{ __('voyager::generic.are_you_sure_delete') }} '<span class="confirm_delete_name"></span>'
+                    </h4>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('voyager::generic.cancel') }}</button>
-                    <button type="button" class="btn btn-danger" id="confirm_delete">{{ __('voyager::generic.delete_confirm') }}
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">{{ __('voyager::generic.cancel') }}
+                    </button>
+                    <button type="button" class="btn btn-danger"
+                            id="confirm_delete">{{ __('voyager::generic.delete_confirm') }}
                     </button>
                 </div>
             </div>
@@ -206,76 +239,94 @@
         var $image;
 
         var ModelGodowns = {};
-        var Quantity = {total : 0, rem : 0};
+        var Quantity = {total: 0, rem: 0};
 
-        function updateRemainingQty()
-        {
-            $('#QS_REMQ').html(Quantity.rem.toString());
-        }
-
-        function QuantityChange(id)
-        {
-            //alert('HOLL');
-            var qty = $('#QS_QTY_'+id).val();
-            if(qty > ModelGodowns[id].qty + Quantity.rem){
-                toastr['error']('Quantity Limit Exceeded');
-                $('#QS_QTY_'+id).val("");
-                $('#QS_QTY_'+id).val(ModelGodowns[id].qty);
-                return false;
-            }
-            Quantity.rem += ModelGodowns[id].qty - qty;
-            ModelGodowns[id].qty = qty;
-            updateRemainingQty();
-        }
-
-        function removeGodown(id) {
-            var qty = $('#QS_QTY_'+id).val();
-            Quantity.rem += parseFloat(qty);
-            $('#_tr_'+id).remove();
-            delete ModelGodowns[id];
-            updateRemainingQty();
-        }
-
-        function AddGodownToModal() {
-            //e.preventDefault();
-            var gSelect = $('#QS_GODOWN_NAME option:selected');
-            var gName = gSelect.text();
-            var gVal = gSelect.val();
-            if (!(gVal in ModelGodowns)){
-                ModelGodowns[gVal] = {id:gVal,name:gName,qty:Quantity.rem};
-                var html = `<tr id="_tr_${gVal}"> <td> ${gName} </td>` +
-                    ` <td> <input id="QS_QTY_${gVal}" type="number" value="${Quantity.rem}" `+
-                    `onkeyup="QuantityChange(${gVal})"/> </td> `+
-                    `  <td> <button class="btn btn-danger hoverable waves-effect waves-light" type="button" onclick="removeGodown(${gVal})"><i class="icon-trash-empty"></i> Remove </button> </td> </tr>`;
-                $('#QS_TABLE').append(html);
-                Quantity.rem = 0;
-                updateRemainingQty();
-            }
-        }
-
-        function submitQSModal()
-        {
+        function submitQSModal() {
             //alert("lol");
-            $('#OPENQSMODALBTN').removeClass('btn-success');
-            $('#OPENQSMODALBTN').addClass('btn-primary');
-            $('#OPENQSMODALBTN').text("Submit");
-            for (var key in ModelGodowns){
+            var obj = $('#OPENQSMODALBTN');
+            obj.removeClass('btn-success');
+            obj.addClass('btn-primary');
+            obj.text("Submit");
+            obj = $('#QS_DisplayTABLE');
+            obj.html('');
+            for (var key in ModelGodowns) {
                 if (ModelGodowns.hasOwnProperty(key)) {
                     var item = ModelGodowns[key];
                     var html = `<tr><td>${item.name}</td><td>${item.qty}</td></tr>`;
-                    $('#QS_DisplayTABLE').append(html);
+                    obj.append(html);
                 }
             }
         }
 
-        $('document').ready(function () 
-        {
+        function UpdateQABTN() {
+            var value = $('#quantity').val();
+            var obj = $('#QuantityAllocationBTN');
+            //console.log(value,value && isNaN(value) === false);
+            if( value && isNaN(value) === false){
+                obj.removeClass('disabled');
+                obj.removeClass('btn-flat');
+            }
+            else {
+                obj.addClass('disabled');
+                obj.addClass('btn-flat');
+            }
+        }
+
+        $('document').ready(function () {
+
+            var app = new Vue({
+                el: '#VueApp',
+                data: {
+                    quantity : Quantity.total,
+                    godowns : [
+                        { val : 1 , text : "Godown 1"},
+                        { val : 2 , text : "Godown 2"},
+                        { val : 3 , text : "Godown 3"},
+                    ],
+                    allocation : ModelGodowns,
+                },
+                computed : {
+                    remaining : function () {
+                        var sum = 0;
+                        for (var key in this.allocation) {
+                            if (this.allocation.hasOwnProperty(key)) {
+                                //console.log(key + " -> " + p[key]);
+                                sum += this.allocation[key].qty;
+                            }
+                        }
+                        return parseInt(this.quantity) - parseInt(sum);
+                    }
+                },
+                methods : {
+                    addGodown : function (event) {
+                        var gSelect = $('#QS_GODOWN_NAME option:selected');
+                        var gName = gSelect.text();
+                        var gVal = gSelect.val();
+                        var gd = this.godowns[this.godownSelected];
+                        var obj = {
+                            id:  gVal ,
+                            name: gName ,
+                            qty : parseInt(this.remaining)
+                        };
+                        Vue.set(this.allocation,obj.id,obj);
+                        //console.log(this.allocation);
+                    },
+                    removeGodown : function (event) {
+                        var btnObj = $(event.target);
+
+                        var id = btnObj.data('index');
+                        Vue.delete(this.allocation, id);
+                        //console.log(id);
+                    }
+                }
+            });
+
             $('.mdb-select').material_select();
             $("#quantitySharing").on('show.bs.modal', function () {
-                if( !Quantity.total){
-                    Quantity.rem = Quantity.total = parseFloat($('#quantity').val());
-                    $('#QS_TOTALQ').html(Quantity.total.toString());
-                    $('#QS_REMQ').html(Quantity.total.toString());
+                var Value = parseFloat($('#quantity').val());
+                if (!Quantity.total || Quantity.total !== Value) {
+                    Quantity.rem = Quantity.total = Value;
+                    app.quantity = Quantity.total;
                 }
             });
 
@@ -316,10 +367,12 @@
                     if (response
                         && response.data
                         && response.data.status
-                        && response.data.status == 200) {
+                        && response.data.status === 200) {
 
                         toastr.success(response.data.message);
-                        $image.parent().fadeOut(300, function () { $(this).remove(); })
+                        $image.parent().fadeOut(300, function () {
+                            $(this).remove();
+                        })
                     } else {
                         toastr.error("Error removing image.");
                     }
