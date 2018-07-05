@@ -15,9 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-
+Route::get('/admin/godowns/incoming/{id}','GodownsController@incoming')->name('voyager.godowns.incoming');
+Route::get('/admin/godowns/outgoing/{id}','GodownsController@outgoing')->name('voyager.godowns.outgoing');
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
+

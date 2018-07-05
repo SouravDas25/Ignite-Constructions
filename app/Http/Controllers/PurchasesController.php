@@ -17,17 +17,19 @@ use App\Purchase;
 use App\GodownTransfer;
 use App\Seller;
 use App\Good;
+use App\Godown;
 
 class PurchasesController extends VoyagerBaseController
 {
 
     public function edit(Request $request , $id)
     {
-        $purchase=Purchase::find($id);
+        $purchase=Purchase::findOrFail($id);
         $sellers=Seller::all();
         $goods=Good::all();
-
-        return view('vendor.voyager.purchases.edit-add', compact('purchase','sellers','goods'));
+        $godowns=Godown::all();
+        
+        return view('vendor.voyager.purchases.edit-add', compact('purchase','sellers','goods','godowns'));
     }
 
     public function update(Request $request , $id)
@@ -42,7 +44,7 @@ class PurchasesController extends VoyagerBaseController
         );
         $validator = Validator::make(request()->all(), $rules);
 
-        $purchase=Purchase::find($id);
+        $purchase=Purchase::findOrFail($id);
 
         if ($validator->fails()) {
             return redirect()->route('voyager.purchases.show',$purchase->id)->withErrors($validator)->withInput();
@@ -66,8 +68,9 @@ class PurchasesController extends VoyagerBaseController
         $purchase=Purchase::all();
         $sellers=Seller::all();
         $goods=Good::all();
+        $godowns=Godown::all();
 
-        return view('vendor.voyager.purchases.edit-add', compact('purchase','sellers','goods'));
+        return view('vendor.voyager.purchases.edit-add', compact('purchase','sellers','goods','godowns'));
     }
 
     public function store(Request $request)
@@ -78,26 +81,40 @@ class PurchasesController extends VoyagerBaseController
             'quantity'       => 'required|numeric',
             'cost'      => 'required|numeric',
             'date' => 'required|date',
-            'purchase_due' => 'required|numeric'
+            'purchase_due' => 'required|numeric',
+            'QS_godowns' => 'required'
         );
-        $validator = Validator::make(request()->all(), $rules);
+        $data = request()->validate($rules);
 
-        if ($validator->fails()) {
-            return redirect()->route('voyager.purchases.index')->withErrors($validator)->withInput();
-        } else {
-            $purchase=new Purchase();
+        $purchase=new Purchase();
 
-            $purchase->seller_id=request('seller_id');
-            $purchase->goods_id=request('goods_id');
-            $purchase->quantity=request('quantity');
-            $purchase->cost=request('cost');
-            $purchase->date=request('date');
-            $purchase->purchase_due=request('purchase_due');
+        $purchase->seller_id= $data['seller_id'];
+        $purchase->goods_id= $data['goods_id'];
+        $purchase->quantity= $data['quantity'];
+        $purchase->cost=$data['cost'];
+        $purchase->date=$data['date'];
+        $purchase->purchase_due=$data['purchase_due'];
 
-            $purchase->save();
+        $purchase->save();
+
+        $godowns = json_decode($data['QS_godowns']);
+
+        foreach($godowns as $godown) {
+            $godown_id = $godown->id;
+            $qty = $godown->qty;
             
-            return redirect()->route('voyager.purchases.index');
+            $godown_transfer=new GodownTransfer();
+
+            $godown_transfer->godown_id= $godown_id;
+            $godown_transfer->purchase_id= $purchase->id;
+            $godown_transfer->quantity=$qty;
+            $godown_transfer->date= $purchase->date;
+
+            $godown_transfer->save();
         }
+        
+        return redirect()->route('voyager.purchases.index');
+        
     }
 
     
