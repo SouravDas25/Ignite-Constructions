@@ -7,9 +7,9 @@
         <i class="voyager-milestone"></i> View Site &nbsp;
     </h1>
 
-    <a href="{{route('voyager.sellers.edit',$site->id)}}" class="btn btn-info hoverable"><i class="icon-pencil-4 pr-2"></i>Edit</a>
+    <a href="{{route('voyager.sites.edit',$site->id)}}" class="btn btn-info hoverable"><i class="icon-pencil-4 pr-2"></i>Edit</a>
     <a class="btn btn-danger hoverable" data-toggle="modal" data-target="#delete_Modal"><i class="icon-trash-empty pr-2"></i>Delete</a>
-    <a href="{{route('voyager.sellers.index')}}" class="btn btn-yellow hoverable"><i class="icon-th-list pr-2"></i>Return to list</a>
+    <a href="{{route('voyager.sites.index')}}" class="btn btn-yellow hoverable"><i class="icon-th-list pr-2"></i>Return to list</a>
     @include('voyager::multilingual.language-selector')
 @stop
 
