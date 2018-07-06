@@ -18,7 +18,7 @@ class CreatePurchaseTable extends Migration {
 			$table->integer('seller_id')->unsigned()->index('fk_seller_purchase');
 			$table->integer('goods_id')->unsigned()->index('fk_seller_goods');
 			$table->date('date');
-			$table->integer('quantity');
+			//$table->integer('quantity');
 			$table->decimal('cost', 50, 2);
 			$table->decimal('purchase_due', 50, 2);
 			$table->timestamps();

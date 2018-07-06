@@ -16,14 +16,10 @@ class CreateSiteTransferTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('site_id')->unsigned()->index('fk_site_transfer_site');
-			$table->integer('godown_transfer_id')->unsigned()->index('fk_site_transfer_godown_transfer');
 			$table->date('date');
-			$table->integer('quantity');
 			$table->integer('labour_id')->unsigned()->index('fk_site_transfer_labour');
 			$table->integer('status_id')->unsigned()->index('fk_site_transfer_status');
             $table->timestamps();
-            $table->foreign('godown_transfer_id', 'fk_site_transfer_godown_transfer')
-                ->references('id')->on('godown_transfers')->onUpdate('RESTRICT')->onDelete('RESTRICT');
             $table->foreign('labour_id', 'fk_site_transfer_labour')
                 ->references('id')->on('labours')->onUpdate('RESTRICT')->onDelete('RESTRICT');
             $table->foreign('site_id', 'fk_site_transfer_site')

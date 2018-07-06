@@ -8,13 +8,18 @@ class GodownTransfer extends Model
 {
     protected $fillable=['godown_id','purchase_id','quantity','date'];
 
-    public function godowns()
+    public function godown()
     {
-        return $this->belongsTo('App\Godown','godown_id');
+        return $this->belongsTo('App\Godown');
     }
 
-    public function purchases()
+    public function purchase()
     {
-        return $this->belongsTo('App\Purchase','purchase_id');
+        return $this->belongsTo('App\Purchase');
+    }
+
+    public function siteGodownTransfers()
+    {
+        return $this->hasMany('App\SiteGodownTransfer');
     }
 }
