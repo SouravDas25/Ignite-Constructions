@@ -6,9 +6,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class Status extends Model
 {
+    public static function seedStatus()
+    {
+        $items = [
+            'PENDING',
+            'CONFIRMED'
+        ];
+        foreach($items as $item){
+            $s = new Status();
+            $s->details = $item;
+            $s->save();
+        }
+    }
+
     public static function statusID($status)
     {
         $k = Status::all();
+        if($k->count() < 1){
+            Status::seedStatus();
+            $k = Status::all();
+        }
         //dd($k);
         foreach ($k as $i) {
             //echo strtolower($i->name) ;

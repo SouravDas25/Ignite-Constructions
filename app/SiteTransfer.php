@@ -24,6 +24,21 @@ class SiteTransfer extends Model
     }
 
     /**
+     * @param Status $status
+     * @return SiteTransfer
+     * @throws \Exception
+     */
+    public function updateStatus(Status $status)
+    {
+        $this->status_id = $status->id;
+        $THIS = $this;
+        Utility::runSqlSafely(function () use ($THIS) {
+            $THIS->save();
+        });
+        return $this;
+    }
+
+    /**
      * @param Godown $godown
      * @param Good $goods
      * @param Site $site
@@ -34,12 +49,14 @@ class SiteTransfer extends Model
      */
     public static function newTransfer(Godown $godown, Good $goods, Site $site, Labour $labour, int $quantity)
     {
+        if($quantity == 0){
+            return null;
+        }
         $gt = $godown->getTransferableID($goods);
         //$ids = $gt->pluck('godown_transfer_id');
         $selected = SiteTransfer::selectQuantityTransfers($gt, $quantity);
         //dd($selected);
-        SiteTransfer::saveNewTransfer($site, $labour, $selected);
-        return true;
+        return SiteTransfer::saveNewTransfer($site, $labour, $selected);
     }
 
     /**
@@ -68,10 +85,14 @@ class SiteTransfer extends Model
      * @param Godown $godown
      * @param Good $goods
      * @param int $quantity
+     * @return null
      * @throws \Exception
      */
     public function updateGoods(Godown $godown, Good $goods, int $quantity)
     {
+        if($quantity == 0){
+            return null;
+        }
         $st = $this;
         Utility::runSqlSafely(function () use ($st) {
             SiteGodownTransfer::where('site_transfer_id', $st->id)->delete();
@@ -105,6 +126,9 @@ class SiteTransfer extends Model
      */
     private static function selectQuantityTransfers($godowntransfers, $quantity)
     {
+        if($quantity == 0){
+            return null;
+        }
         $reachQty = $quantity;
         $selected = [];
         foreach ($godowntransfers as $gtrans) {
@@ -149,6 +173,7 @@ class SiteTransfer extends Model
             throw  $exception;
         }
         DB::commit();
+        return $st;
     }
 
     /**
@@ -169,18 +194,4 @@ class SiteTransfer extends Model
         return true;
     }
 
-    /**
-     * @param Status $status
-     * @return bool
-     * @throws \Exception
-     */
-    public function updateStatus(Status $status)
-    {
-        $this->status_id = $status->id;
-        $THIS = $this;
-        Utility::runSqlSafely(function () use ($THIS) {
-            $THIS->save();
-        });
-        return true;
-    }
 }

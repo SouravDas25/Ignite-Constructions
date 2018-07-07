@@ -20,7 +20,7 @@ class Godown extends Model
 
     public function hasGoods(Good $goods, $quantity = null)
     {
-        $data = $this->godownPurchases()->where('goods_id', $goods->id)->sum('quantity');
+        $data = $this->godownTransfers->where('goods_id', $goods->id)->sum('quantity');
         $data -= $this->godownSiteTransfers()->where('goods_id', $goods->id)->sum('site_godown_transfers.quantity');
         if ($quantity) return $quantity <= $data;
         return $data;
@@ -30,7 +30,6 @@ class Godown extends Model
     {
         $data = DB::table('godown_transfers')
             ->leftJoin('site_godown_transfers', 'godown_transfers.id', '=', 'site_godown_transfers.godown_transfer_id')
-            ->join('purchases', 'godown_transfers.purchase_id', '=', 'purchases.id')
             ->where('godown_id', $this->id)
             ->where('goods_id', $goods->id)
             ->groupBy('godown_transfers.id')
@@ -44,19 +43,10 @@ class Godown extends Model
         return $data;
     }
 
-    private function godownPurchases()
-    {
-        $query = DB::table('godown_transfers');
-        $query->join('purchases', 'godown_transfers.purchase_id', '=', 'purchases.id')
-            ->where('godown_id', $this->id);
-        return $query;
-    }
-
     private function godownSiteTransfers()
     {
         $query = DB::table('site_godown_transfers');
         $query->join('godown_transfers', 'site_godown_transfers.godown_transfer_id', '=', 'godown_transfers.id')
-            ->join('purchases', 'godown_transfers.purchase_id', '=', 'purchases.id')
             ->where('godown_id', $this->id);
         return $query;
     }

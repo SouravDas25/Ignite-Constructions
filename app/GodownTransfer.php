@@ -13,6 +13,11 @@ class GodownTransfer extends Model
         return $this->belongsTo('App\Godown');
     }
 
+    public function good()
+    {
+        return $this->belongsTo('App\Good');
+    }
+
     public function purchase()
     {
         return $this->belongsTo('App\Purchase');
