@@ -13,7 +13,7 @@ class GodownTransfer extends Model
         return $this->belongsTo('App\Godown');
     }
 
-    public function good()
+    public function goods()
     {
         return $this->belongsTo('App\Good');
     }

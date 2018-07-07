@@ -13,14 +13,34 @@ class SiteTransfer extends Model
         return $this->belongsTo('App\Site');
     }
 
+    public function status()
+    {
+        return $this->belongsTo('App\Status');
+    }
+
+    public function labour()
+    {
+        return $this->belongsTo('App\Labour');
+    }
+
     public function siteGodownTransfers()
     {
         return $this->hasMany('App\SiteGodownTransfer');
     }
 
+    public function transferDetails()
+    {
+        return $this->hasMany('App\SiteTransferDetail');
+    }
+
     public function transferQuantity()
     {
         return $this->siteGodownTransfers->sum('quantity');
+    }
+
+    public function addActivity(int $quantity,Status $status)
+    {
+        return SiteTransferDetail::addActivity($this,$quantity,$status);
     }
 
     /**
@@ -160,8 +180,8 @@ class SiteTransfer extends Model
     private static function saveNewTransfer(Site $site, Labour $labour, $selected)
     {
         DB::beginTransaction();
+        $st = new SiteTransfer();
         try {
-            $st = new SiteTransfer();
             $st->site_id = $site->id;
             $st->date = Carbon::now()->toDateString();
             $st->labour_id = $labour->id;

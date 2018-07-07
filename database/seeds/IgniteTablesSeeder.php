@@ -100,7 +100,15 @@ class IgniteTablesSeeder extends Seeder
             $site = $sites[$i];
             $labour = $labours[$i];
             $quantity = rand( 0 , $godown->hasGoods($good) );
-            \App\SiteTransfer::newTransfer($godown,$good,$site,$labour,$quantity);
+            $st = \App\SiteTransfer::newTransfer($godown,$good,$site,$labour,$quantity);
+            if($st){
+                $qty = $quantity > 1 ? $quantity/2 : $quantity;
+                $st->addActivity(0,\App\Status::GODOWN());
+                $st->addActivity($qty,\App\Status::SITE());
+                $st->addActivity(0,\App\Status::GODOWN());
+                $st->addActivity($qty,\App\Status::SITE());
+            }
         }
+
     }
 }

@@ -6,13 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Status extends Model
 {
+    public static $items = [
+        'PENDING',
+        'CONFIRMED',
+        'GODOWN',
+        'SITE',
+    ];
+
     public static function seedStatus()
     {
-        $items = [
-            'PENDING',
-            'CONFIRMED'
-        ];
-        foreach($items as $item){
+        foreach(Status::$items as $item){
             $s = new Status();
             $s->details = $item;
             $s->save();
@@ -22,7 +25,8 @@ class Status extends Model
     public static function statusID($status)
     {
         $k = Status::all();
-        if($k->count() < 1){
+        if($k->count() != count(Status::$items) ){
+            //Status::truncate();
             Status::seedStatus();
             $k = Status::all();
         }
@@ -47,6 +51,18 @@ class Status extends Model
     public static function CONFIRMED()
     {
         $id = Status::statusID("CONFIRMED");
+        return Status::find($id);
+    }
+
+    public static function GODOWN()
+    {
+        $id = Status::statusID("GODOWN");
+        return Status::find($id);
+    }
+
+    public static function SITE()
+    {
+        $id = Status::statusID("SITE");
         return Status::find($id);
     }
 }

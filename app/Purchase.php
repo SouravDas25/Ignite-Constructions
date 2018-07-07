@@ -14,9 +14,9 @@ class Purchase extends Model
 		return $this->belongsTo('App\Seller','seller_id');
 	}
 
-	public function godownTransfer()
+	public function godownTransfers()
     {
-        return $this->hasOne('App\GodownTransfer');
+        return $this->hasMany('App\GodownTransfer');
     }
 
 	public function quantity()
@@ -29,16 +29,50 @@ class Purchase extends Model
         return new PurchaseBuilder();
     }
 
+    public static function updatePurchase($id)
+    {
+        Purchase::findOrFail($id);
+        return new PurchaseBuilder($id);
+    }
+
+    /**
+     * @param $id
+     * @throws \Exception
+     */
+    public static function deletePurchase($id)
+    {
+        Purchase::findOrFail($id);
+        Utility::runSqlSafely(function () use($id) {
+            Purchase::deleteGodownTransfers($id);
+            Purchase::destroy($id);
+        });
+    }
+
+    public static function deleteGodownTransfers(int $id)
+    {
+        GodownTransfer::where('purchase_id',$id)->delete();
+    }
+
 }
 
 class PurchaseBuilder
 {
-    private $items,$puchase;
+    private $items,$puchase,$id;
 
-    public function __construct()
+    public function __construct(int $id = null)
     {
-        $this->puchase = new Purchase();
+        $this->id = $id;
+        $this->puchase = $id != null ? Purchase::findOrFail($id) :new Purchase();
         $this->items = [];
+        foreach ($this->puchase->godownTransfers as $gt){
+            $item = new \stdClass();
+            $item->id = $gt->id;
+            $item->godown = $gt->godown;
+            $item->goods = $gt->goods;
+            $item->quantity = $gt->quantity;
+            $item->cost = $gt->cost;
+            array_push($this->items,$item);
+        }
     }
 
     public function seller(Seller $seller)
@@ -70,14 +104,37 @@ class PurchaseBuilder
         return $this;
     }
 
+    public function delIndex(int $index)
+    {
+        if($index)unset($this->items[$index]);
+        return $this;
+    }
+
+    public function delTransfer(GodownTransfer $transfer)
+    {
+        $index = null;
+        $i = 0;
+        foreach ($this->items as $item){
+            if($item->id && $item->id == $transfer->id)
+            {
+                $index = $i;
+                break;
+            }
+            $i++;
+        }
+        return $this->delIndex($index);
+    }
+
     /**
      * @throws \Exception
      */
     public function save()
     {
+        $id = $this->id;
         $purchase = $this->puchase;
         $items = $this->items;
-        Utility::runSqlSafely(function () use ($purchase,$items) {
+        Utility::runSqlSafely(function () use ($purchase,$items,$id) {
+            if($id != null) Purchase::deleteGodownTransfers($id);
             $purchase->save();
             foreach ($items as $item){
                 $gt = new GodownTransfer();

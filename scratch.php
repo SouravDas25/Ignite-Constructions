@@ -76,9 +76,21 @@ function addTransfer() {
     $site = \App\Site::inRandomOrder()->first();
     $labour = \App\Labour::inRandomOrder()->first();
     $quantity = rand( 0 , $godown->hasGoods($good) );
-    $t = \App\SiteTransfer::newTransfer($godown,$good,$site,$labour,$quantity);
-    return $t;
+    $st = \App\SiteTransfer::newTransfer($godown,$good,$site,$labour,$quantity);
+    if($st){
+        $qty = $quantity > 1 ? $quantity/2 : $quantity;
+        $st->addActivity(0,\App\Status::GODOWN());
+        $st->addActivity($qty,\App\Status::SITE());
+        $st->addActivity(0,\App\Status::GODOWN());
+        $st->addActivity($qty,\App\Status::SITE());
+    }
+    return $st;
 }
 
+
+$purchase = \App\Purchase::find(6);
+$p = \App\Purchase::updatePurchase(6);
+
+echo $purchase;
 
 //$st->updateGoods($godown,$goods,10);
