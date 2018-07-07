@@ -31,19 +31,18 @@ function addGodown() {
 
 function addPurchase() {
     $faker = Faker\Factory::create();
-    $s = \App\Purchase::newPurchase();
-    $cost = rand(100,10000);
     $seller = \App\Seller::inRandomOrder()->first();
-    $s->seller($seller)
+    $s = \App\Purchase::newPurchase()
+        ->seller($seller)
         ->date(Carbon::parse($faker->date('Y-m-d')))
-        ->due(rand(0,$cost))
-        ->cost($cost);
+        ->due(rand(0,500));
     $godowns = \App\Godown::limit(5)->get()->shuffle();
     $goods = \App\Good::limit(5)->get()->shuffle();
     foreach ($godowns as $godown){
         $good = $goods[rand(0,4)];
         $quantity = rand(1,100);
-        $s->addItem($godown,$good,$quantity);
+        $cost = rand(100,3000);
+        $s->addItem($godown,$good,$quantity,$cost);
     }
     $s->save();
     return $s;

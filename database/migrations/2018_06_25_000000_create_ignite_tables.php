@@ -41,7 +41,6 @@ class CreateIgniteTables extends Migration
             $table->integer('seller_id')->unsigned()->index('fk_seller_purchase');
             $table->date('date');
             //$table->integer('quantity');
-            $table->decimal('cost', 50, 2);
             $table->decimal('purchase_due', 50, 2);
             $table->timestamps();
             $table->foreign('seller_id', 'fk_seller_purchase')
@@ -54,6 +53,7 @@ class CreateIgniteTables extends Migration
             $table->integer('goods_id')->unsigned()->index('fk_seller_goods');
             $table->integer('purchase_id')->unsigned()->index('fk_purchase_godown');
             $table->integer('quantity');
+            $table->decimal('cost', 50, 2);
             $table->timestamps();
             $table->foreign('godown_id', 'fk_godown_transfer_godown')
                 ->references('id')->on('godowns')->onUpdate('RESTRICT')->onDelete('RESTRICT');
@@ -89,6 +89,7 @@ class CreateIgniteTables extends Migration
             $table->increments('id');
             $table->integer('site_id')->unsigned()->index('fk_site_transfer_site');
             $table->date('date');
+            $table->integer('radius')->default(50);
             $table->integer('labour_id')->unsigned()->index('fk_site_transfer_labour');
             $table->integer('status_id')->unsigned()->index('fk_site_transfer_status');
             $table->timestamps();

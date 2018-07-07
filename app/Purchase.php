@@ -53,24 +53,19 @@ class PurchaseBuilder
         return $this;
     }
 
-    public function cost(float $cost)
-    {
-        $this->puchase->cost = $cost;
-        return $this;
-    }
-
     public function due(float $due)
     {
         $this->puchase->purchase_due = $due;
         return $this;
     }
 
-    public function addItem(Godown $godown,Good $goods,int $quantity)
+    public function addItem(Godown $godown,Good $goods,int $quantity,float $cost)
     {
         $item = new \stdClass();
         $item->godown = $godown;
         $item->goods = $goods;
         $item->quantity = $quantity;
+        $item->cost = $cost;
         array_push($this->items,$item);
         return $this;
     }
@@ -90,6 +85,7 @@ class PurchaseBuilder
                 $gt->purchase_id = $purchase->id;
                 $gt->goods_id = $item->goods->id;
                 $gt->quantity = $item->quantity;
+                $gt->cost = $item->cost;
                 $gt->save();
             }
         });

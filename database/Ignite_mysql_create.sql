@@ -136,13 +136,16 @@ CREATE TABLE IF NOT EXISTS `site_transfers` (
 CREATE TABLE IF NOT EXISTS `site_transfer_details` (
 	`id` INT(50) NOT NULL AUTO_INCREMENT,
 	`site_transfer_id` INT(50) NOT NULL,
-	`onset_datetime` DATETIME NOT NULL,
+	`datetime` DATETIME NOT NULL,
 	`quantity` INT(50) NOT NULL,
+	`status_id` INT(50) NOT NULL,
 	`created_at` DATETIME,
 	`updated_at` DATETIME,
 	PRIMARY KEY (`id`),
 	FOREIGN KEY fk_site_transfer_details_site_transfer(site_transfer_id)
-	REFERENCES site_transfers(id) ON UPDATE RESTRICT ON DELETE RESTRICT
+	REFERENCES site_transfers(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	FOREIGN KEY fk_site_transfer_details_status_id(status_id)
+	REFERENCES statuses(id) ON UPDATE RESTRICT ON DELETE RESTRICT
 );
 
 
