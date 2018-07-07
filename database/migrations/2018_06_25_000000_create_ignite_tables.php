@@ -101,17 +101,6 @@ class CreateIgniteTables extends Migration
 
         });
 
-        Schema::create('site_transfer_details', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('site_transfer_id')->unsigned()->index('fk_site_transfer_details_site_transfer');
-            $table->dateTime('onset_datetime');
-            $table->integer('quantity');
-            $table->timestamps();
-            $table->foreign('site_transfer_id', 'fk_site_transfer_details_site_transfer')
-                ->references('id')->on('site_transfers')->onUpdate('RESTRICT')->onDelete('RESTRICT');
-
-        });
-
         Schema::create('site_godown_transfers', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('godown_transfer_id')->unsigned()->index('fk_site_godown_transfer_godown_transfer');
@@ -122,6 +111,19 @@ class CreateIgniteTables extends Migration
                 ->references('id')->on('godown_transfers')->onUpdate('RESTRICT')->onDelete('RESTRICT');
             $table->foreign('site_transfer_id', 'fk_site_godown_transfer_site_transfer')
                 ->references('id')->on('site_transfers')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+        });
+
+        Schema::create('site_transfer_details', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('site_transfer_id')->unsigned()->index('fk_site_transfer_details_site_transfer');
+            $table->dateTime('datetime');
+            $table->integer('quantity');
+            $table->integer('status_id')->unsigned()->index('fk_site_transfer_details_status_id');
+            $table->timestamps();
+            $table->foreign('site_transfer_id', 'fk_site_transfer_details_site_transfer')
+                ->references('id')->on('site_transfers')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+            $table->foreign('status_id', 'fk_site_transfer_details_status_id')
+                ->references('id')->on('statuses')->onUpdate('RESTRICT')->onDelete('RESTRICT');
         });
     }
 
