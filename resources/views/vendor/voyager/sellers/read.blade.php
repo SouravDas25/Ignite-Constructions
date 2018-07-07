@@ -84,9 +84,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        ...
-                    </div>
+                    
                     <div class="modal-footer">
                         <form action="{{ route('voyager.sellers.destroy' , ['id' => $seller->id ] ) }}" id="delete_form" method="POST">
                             {{ method_field("DELETE") }}

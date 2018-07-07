@@ -1,5 +1,6 @@
 
 DROP TABLE IF EXISTS `site_transfer_details`;
+DROP TABLE IF EXISTS `site_godown_transfers`;
 DROP TABLE IF EXISTS `site_transfers`;
 DROP TABLE IF EXISTS `labours`;
 DROP TABLE IF EXISTS `statuses`;
@@ -35,7 +36,6 @@ CREATE TABLE IF NOT EXISTS `purchases` (
 	`seller_id` INT(50) NOT NULL,
 	`goods_id` INT(50) NOT NULL,
 	`date` DATE NOT NULL,
-	`quantity` INT(50) NOT NULL,
 	`cost` DECIMAL(50) NOT NULL,
 	`purchase_due` DECIMAL(50) NOT NULL,
 	`created_at` DATETIME,
@@ -100,12 +100,24 @@ CREATE TABLE IF NOT EXISTS `labours` (
 	PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `site_godown_transfers` (
+	`id` int(10) UNSIGNED NOT NULL,
+	`site_transfer_id` int(10) UNSIGNED NOT NULL,
+	`godown_transfer_id` int(10) UNSIGNED NOT NULL,
+	`quantity` int(11) NOT NULL,
+	`created_at` timestamp NULL DEFAULT NULL,
+	`updated_at` timestamp NULL DEFAULT NULL,
+	PRIMARY KEY (`id`),
+	FOREIGN KEY fk_site_godown_transfers_site_transfers(site_transfer_id)
+	REFERENCES site_transfers(id) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	FOREIGN KEY fk_site_godown_transfers_godown_transfers(godown_transfer_id)
+	REFERENCES godown_transfers(id) ON UPDATE RESTRICT ON DELETE RESTRICT
+);
+
 CREATE TABLE IF NOT EXISTS `site_transfers` (
 	`id` INT(50) NOT NULL AUTO_INCREMENT,
 	`site_id` INT(50) NOT NULL,
-	`godown_transfer_id` INT(50) NOT NULL,
 	`date` DATE NOT NULL,
-	`quantity` INT(50) NOT NULL,
 	`labour_id` INT(50) NOT NULL,
 	`status_id` INT(50) NOT NULL,
 	`created_id` DATETIME,

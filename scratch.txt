@@ -1,1 +1,0 @@
-php artisan migrate:generate seller,goods,purchase,godown_transfer,status,labour,site_transfer,site_transfer_details
