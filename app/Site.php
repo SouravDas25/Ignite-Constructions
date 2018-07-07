@@ -54,7 +54,7 @@ class Site extends Model
      *
      * @throws \Exception
      */
-    public static function saveNewTransfer(Site $site,Labour $labour,$selected)
+    private static function saveNewTransfer(Site $site,Labour $labour,$selected)
     {
         DB::beginTransaction();
         try{
