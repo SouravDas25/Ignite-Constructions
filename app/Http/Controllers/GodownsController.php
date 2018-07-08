@@ -32,51 +32,11 @@ class GodownsController extends VoyagerBaseController
         return view('vendor.voyager.godowns.outgoing',compact('godown'));
     }
 
-    public function destroy(Request $request, $id)
+    public function show(Request $request, $id)
     {
-        $slug = $this->getSlug($request);
+        $godown=Godown::find($id);
 
-        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
-
-        // Check permission
-        $this->authorize('delete', app($dataType->model_name));
-
-        // Init array of IDs
-        $ids = [];
-        if (empty($id)) {
-            // Bulk delete, get IDs from POST
-            $ids = explode(',', $request->ids);
-        } else {
-            // Single item delete, get ID from URL
-            $ids[] = $id;
-        }
-        foreach ($ids as $id) {
-            $data = call_user_func([$dataType->model_name, 'findOrFail'], $id);
-            $this->cleanup($dataType, $data);
-        }
-
-        $displayName = count($ids) > 1 ? $dataType->display_name_plural : $dataType->display_name_singular;
-
-        $res = $data->destroy($ids);
-        $data = $res
-            ? [
-                'message' => __('voyager::generic.successfully_deleted') . " {$displayName}",
-                'alert-type' => 'success',
-            ]
-            : [
-                'message' => __('voyager::generic.error_deleting') . " {$displayName}",
-                'alert-type' => 'error',
-            ];
-
-        if ($res) {
-            event(new BreadDataDeleted($dataType, $data));
-        }
-
-        $godowntransfer=GodownTransfer::where('godown_id','=',$id)->get();
-
-        $godowntransfer->delete();
-
-        return redirect()->route("voyager.godowns.index")->with($data);
+        return view('vendor.voyager.godowns.read', compact('godown'));
     }
 }
 

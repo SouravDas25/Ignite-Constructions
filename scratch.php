@@ -88,9 +88,4 @@ function addTransfer() {
 }
 
 
-$purchase = \App\Purchase::find(6);
-$p = \App\Purchase::updatePurchase(6);
-
-echo $purchase;
-
 //$st->updateGoods($godown,$goods,10);

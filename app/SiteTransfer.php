@@ -69,7 +69,7 @@ class SiteTransfer extends Model
      */
     public static function newTransfer(Godown $godown, Good $goods, Site $site, Labour $labour, int $quantity)
     {
-        if($quantity == 0){
+        if($quantity == 0) {
             return null;
         }
         $gt = $godown->getTransferableID($goods);
