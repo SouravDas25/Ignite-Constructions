@@ -1,183 +1,321 @@
 @extends('voyager::master')
 
-@section('page_title', __('voyager::generic.view').' '.$dataType->display_name_singular)
+@section('page_title', 'View Transfer')
+
+@section('css')
+    <link rel="stylesheet" href="{{ asset('/css/map-icons.css') }}">
+@stop
 
 @section('page_header')
     <h1 class="page-title">
-        <i class="{{ $dataType->icon }}"></i> {{ __('voyager::generic.viewing') }} {{ ucfirst($dataType->display_name_singular) }} &nbsp;
-
-        @can('edit', $dataTypeContent)
-        <a href="{{ route('voyager.'.$dataType->slug.'.edit', $dataTypeContent->getKey()) }}" class="btn btn-lg btn-info">
-            <span class="glyphicon glyphicon-pencil"></span>&nbsp;
-            {{ __('voyager::generic.edit') }}
-        </a>
-        @endcan
-        @can('delete', $dataTypeContent)
-            <a href="javascript:;" title="{{ __('voyager::generic.delete') }}" class="btn btn-danger btn-lg delete" data-id="{{ $dataTypeContent->getKey() }}" id="delete-{{ $dataTypeContent->getKey() }}">
-                <i class="voyager-trash"></i> <span class="hidden-xs hidden-sm">{{ __('voyager::generic.delete') }}</span>
-            </a>
-        @endcan
-
-        <a href="{{ route('voyager.'.$dataType->slug.'.index') }}" class="btn btn-lg btn-warning">
-            <span class="glyphicon glyphicon-list"></span>&nbsp;
-            {{ __('voyager::generic.return_to_list') }}
-        </a>
+        <i class="icon-switch"></i> Site Transfer&nbsp;
     </h1>
-    @include('voyager::multilingual.language-selector')
+    <a class="btn btn-primary btn-lg">
+        Activity List
+    </a>
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+
+        .map-icon-label .map-icon {
+            font-size: 18px;
+            line-height: 48px;
+            text-align: center;
+            white-space: nowrap;
+            padding-bottom: 5px;
+        }
+
+        .admin-up {
+            margin-top: 0 !important;
+        }
+
+        .progress {
+            height: 6px !important;
+        }
+
+        .Center-Container {
+            position: relative;
+            height: 100%;
+        }
+
+    </style>
 @stop
 
 @section('content')
     <div class="page-content read container-fluid">
         <div class="row">
+            <div class="col-xl-5 col-md-5 mb-4 ">
+                @component('includes.infoCard',[
+                'infoCardName' => 'Godown',
+                'infoCardTitle' => $siteTransfer->godown()->name,
+                'infoCardSubTitle' => $siteTransfer->godown()->address,
+                'infoCardColor' => 'bg-warning',
+                'infoCardIcon' => 'fa map-icon map-icon-store',
+                ])
+                @endcomponent
+            </div>
+            <div class="col-xl-2 col-md-2 mb-4 ">
+                <div style="font-size:15px" class="row font-weight-600 text-center my-5 Center-Container">
+                    <div class="col-sm-12" id="distanceGS">
+                        40 KM
+                    </div>
+                    <div class="col-sm-12 ">
+                        <i class="fa fa-3x fa-exchange" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-sm-12 " id="timeGS">
+                        5 Mins
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-5 col-md-5 mb-4 ">
+                @component('includes.infoCard',[
+                'infoCardName' => 'Site',
+                'infoCardTitle' => $siteTransfer->site->name,
+                'infoCardSubTitle' => $siteTransfer->site->address,
+                'infoCardColor' => 'bg-danger',
+                'infoCardIcon' => 'fa fa-briefcase',
+                ])
+                @endcomponent
+            </div>
+        </div>
+        <div class="row mt-4">
             <div class="col-md-12">
-
-                <div class="card " style="padding-bottom:5px;">
-                    <!-- form start -->
-                    @foreach($dataType->readRows as $row)
-                        @php $rowDetails = json_decode($row->details);
-                         if($rowDetails === null){
-                                $rowDetails=new stdClass();
-                                $rowDetails->options=new stdClass();
-                         }
-                        @endphp
-
-                        <div class="card-heading" style="border-bottom:0;">
-                            <h3 class="panel-title">{{ $row->display_name }}</h3>
-                        </div>
-
-                        <div class="card-body" style="padding-top:0; font-weight:bold!important;">
-                            @if($row->type == "image")
-                                <img class="img-fluid" style="height: 50%"
-                                     src="{{ filter_var($dataTypeContent->{$row->field}, FILTER_VALIDATE_URL) ? $dataTypeContent->{$row->field} : Voyager::image($dataTypeContent->{$row->field}) }}">
-                            @elseif($row->type == 'multiple_images img-thumbnail')
-                                @if(json_decode($dataTypeContent->{$row->field}))
-                                    @foreach(json_decode($dataTypeContent->{$row->field}) as $file)
-                                        <img class="img-fluid img-thumbnail" style="height: 50%"
-                                             src="{{ filter_var($file, FILTER_VALIDATE_URL) ? $file : Voyager::image($file) }}">
-                                    @endforeach
-                                @else
-                                    <img class="img-fluid img-thumbnail" style="height: 50%"
-                                         src="{{ filter_var($dataTypeContent->{$row->field}, FILTER_VALIDATE_URL) ? $dataTypeContent->{$row->field} : Voyager::image($dataTypeContent->{$row->field}) }}">
-                                @endif
-                            @elseif($row->type == 'relationship')
-                                 @include('voyager::formfields.relationship', ['view' => 'read', 'options' => $rowDetails])
-                            @elseif($row->type == 'select_dropdown' && property_exists($rowDetails, 'options') &&
-                                    !empty($rowDetails->options->{$dataTypeContent->{$row->field}})
-                            )
-
-                                <?php echo $rowDetails->options->{$dataTypeContent->{$row->field}};?>
-                            @elseif($row->type == 'select_dropdown' && $dataTypeContent->{$row->field . '_page_slug'})
-                                <a href="{{ $dataTypeContent->{$row->field . '_page_slug'} }}">{{ $dataTypeContent->{$row->field}  }}</a>
-                            @elseif($row->type == 'select_multiple')
-                                @if(property_exists($rowDetails, 'relationship'))
-
-                                    @foreach(json_decode($dataTypeContent->{$row->field}) as $item)
-                                        @if($item->{$row->field . '_page_slug'})
-                                        <a href="{{ $item->{$row->field . '_page_slug'} }}">{{ $item->{$row->field}  }}</a>@if(!$loop->last), @endif
-                                        @else
-                                        {{ $item->{$row->field}  }}
-                                        @endif
-                                    @endforeach
-
-                                @elseif(property_exists($rowDetails, 'options'))
-                                    @foreach(json_decode($dataTypeContent->{$row->field}) as $item)
-                                     {{ $rowDetails->options->{$item} . (!$loop->last ? ', ' : '') }}
-                                    @endforeach
-                                @endif
-                            @elseif($row->type == 'date' || $row->type == 'timestamp')
-                                {{ $rowDetails && property_exists($rowDetails, 'format') ? \Carbon\Carbon::parse($dataTypeContent->{$row->field})->formatLocalized($rowDetails->format) : $dataTypeContent->{$row->field} }}
-                            @elseif($row->type == 'checkbox')
-                                @if($rowDetails && property_exists($rowDetails, 'on') && property_exists($rowDetails, 'off'))
-                                    @if($dataTypeContent->{$row->field})
-                                    <span class="label label-info">{{ $rowDetails->on }}</span>
-                                    @else
-                                    <span class="label label-primary">{{ $rowDetails->off }}</span>
-                                    @endif
-                                @else
-                                {{ $dataTypeContent->{$row->field} }}
-                                @endif
-                            @elseif($row->type == 'color')
-                                <span class="badge badge-lg" style="background-color: {{ $dataTypeContent->{$row->field} }}">{{ $dataTypeContent->{$row->field} }}</span>
-                            @elseif($row->type == 'coordinates')
-                                @include('voyager::partials.coordinates')
-                            @elseif($row->type == 'rich_text_box')
-                                @include('voyager::multilingual.input-hidden-bread-read')
-                                <p>{!! $dataTypeContent->{$row->field} !!}</p>
-                            @elseif($row->type == 'file')
-                                @if(json_decode($dataTypeContent->{$row->field}))
-                                    @foreach(json_decode($dataTypeContent->{$row->field}) as $file)
-                                        <a href="{{ Storage::disk(config('voyager.storage.disk'))->url($file->download_link) ?: '' }}">
-                                            {{ $file->original_name ?: '' }}
-                                        </a>
-                                        <br/>
-                                    @endforeach
-                                @else
-                                    <a href="{{ Storage::disk(config('voyager.storage.disk'))->url($row->field) ?: '' }}">
-                                        {{ __('voyager::generic.download') }}
-                                    </a>
-                                @endif
-                            @else
-                                @include('voyager::multilingual.input-hidden-bread-read')
-                                <p>{{ $dataTypeContent->{$row->field} }}</p>
-                            @endif
-                        </div><!-- panel-body -->
-                        @if(!$loop->last)
-                            <hr style="margin:0;">
-                        @endif
-                    @endforeach
-
+                <div class="card pb-0" style="padding-bottom:5px;" id="app">
+                    <div class="">
+                        <div id="map" class="card-body"></div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="row mt-4">
+            <div class="col-xl-6 col-md-6 mb-4 ">
+                @component('includes.infoCard',[
+                'infoCardName' => 'Labour',
+                'infoCardTitle' => $siteTransfer->labour->name,
+                'infoCardColor' => 'bg-success',
+                'infoCardSubTitle' => '',
+                'infoCardIcon' => 'fa icon-user',])
+
+                    <ul>
+                        <li>
+                            Distance To Site - <span id="distanceLS"> 0 KM</span>
+                        </li>
+                        <li>
+                            Estimated Time - <span id="timeLS"> 0 KM</span>
+                        </li>
+                    </ul>
+
+                @endcomponent
+            </div>
+            <div class="col-xl-6 col-md-6 mb-4 ">
+                @component('includes.infoCard',[
+                'infoCardName' => 'Goods',
+                'infoCardTitle' => $siteTransfer->goods()->name,
+                'infoCardColor' => 'bg-primary',
+                'infoCardSubTitle' => $siteTransfer->goods()->details,
+                'infoCardIcon' => 'fa voyager-puzzle',])
+
+                    <ul>
+                        <li> Quantity - {{ $siteTransfer->transferQuantity() }}
+                            <small>unit</small>
+                        </li>
+                    </ul>
+
+                @endcomponent
+            </div>
+        </div>
     </div>
-    {{-- Single delete modal --}}
-    <div class="modal modal-danger fade" tabindex="-1" id="delete_modal" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ __('voyager::generic.close') }}"><span
-                                aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><i class="voyager-trash"></i> {{ __('voyager::generic.delete_question') }} {{ strtolower($dataType->display_name_singular) }}?</h4>
-                </div>
-                <div class="modal-footer">
-                    <form action="{{ route('voyager.'.$dataType->slug.'.index') }}" id="delete_form" method="POST">
-                        {{ method_field("DELETE") }}
-                        {{ csrf_field() }}
-                        <input type="submit" class="btn btn-danger pull-right delete-confirm"
-                               value="{{ __('voyager::generic.delete_confirm') }} {{ strtolower($dataType->display_name_singular) }}">
-                    </form>
-                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{ __('voyager::generic.cancel') }}</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 @stop
 
 @section('javascript')
-    @if ($isModelTranslatable)
+    <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
+    <script src="{{ asset('/js/map-icons.js') }}"></script>
     <script>
-        $(document).ready(function () {
-            $('.side-body').multilingual();
+        Pusher.logToConsole = true;
+        var pusher = new Pusher('d23ff382e22f5abbe1f9', {
+            cluster: 'ap2',
+            encrypted: true
         });
-    </script>
-    <script src="{{ voyager_asset('js/multilingual.js') }}"></script>
-    @endif
-    <script>
-        var deleteFormAction;
-        $('.delete').on('click', function (e) {
-            var form = $('#delete_form')[0];
 
-            if (!deleteFormAction) { // Save form action initial value
-                deleteFormAction = form.action;
+        var channel = pusher.subscribe('location');
+        channel.bind('App\\Events\\SendLocation', function (data) {
+            data = data.data;
+            if (data.labour_id == Labour.id) {
+                setLabourPosition(data.location);
+                console.log(data);
             }
-
-            form.action = deleteFormAction.match(/\/[0-9]+$/)
-                ? deleteFormAction.replace(/([0-9]+$)/, $(this).data('id'))
-                : deleteFormAction + '/' + $(this).data('id');
-            console.log(form.action);
-
-            $('#delete_modal').modal('show');
         });
 
+        var Godown = {
+            id: '{{ $siteTransfer->godown()->id }}',
+            name: '{{ $siteTransfer->godown()->name }}',
+            location: {
+                lat: parseFloat("{{ $siteTransfer->godown()->getLatLng()->lat }}"),
+                lng: parseFloat("{{ $siteTransfer->godown()->getLatLng()->lng }}")
+            },
+        };
+        var Site = {
+            id: '{{ $siteTransfer->site->id }}',
+            name: '{{ $siteTransfer->site->name }}',
+            location: {
+                lat: parseFloat("{{ $siteTransfer->site->getLatLng()->lat }}"),
+                lng: parseFloat("{{ $siteTransfer->site->getLatLng()->lng }}")
+            },
+        };
+
+        var Labour = {
+            id: '{{ $siteTransfer->labour->id }}',
+            name: '{{ $siteTransfer->labour->name }}',
+            location: {
+                lat: parseFloat("{{ $siteTransfer->labour->getLatLng()->lat }}"),
+                lng: parseFloat("{{ $siteTransfer->labour->getLatLng()->lng }}")
+            },
+        };
+
+        function initMap() {
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: Godown.location,
+                zoom: 0,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            Godown.marker = new mapIcons.Marker({
+                map: map,
+                position: Godown.location,
+                icon: {
+                    path: mapIcons.shapes.MAP_PIN,
+                    fillColor: '#ff4444',
+                    fillOpacity: 1,
+                    strokeColor: '',
+                    strokeWeight: 0
+                },
+                map_icon_label: '<span class="map-icon map-icon-store"></span>'
+            });
+
+            Site.marker = new mapIcons.Marker({
+                map: map,
+                position: Site.location,
+                icon: {
+                    path: mapIcons.shapes.MAP_PIN,
+                    fillColor: '#FF8800',
+                    fillOpacity: 1,
+                    strokeColor: '',
+                    strokeWeight: 0
+                },
+                map_icon_label: '<span class="map-icon map-icon-travel-agency"></span>'
+            });
+
+            Labour.marker = new mapIcons.Marker({
+                map: map,
+                position: Labour.location,
+                draggable: true,
+                icon: {
+                    path: mapIcons.shapes.MAP_PIN,
+                    fillColor: '#00C851',
+                    fillOpacity: 1,
+                    strokeColor: '',
+                    strokeWeight: 0
+                },
+                map_icon_label: '<span class="map-icon map-icon-moving-company"  style="padding-bottom: 2px;"></span>'
+            });
+
+            Labour.marker.addListener('dragend', function (event) {
+                //console.log(event.latLng);
+                var lat, lng;
+                lat = event.latLng.lat();
+                lng = event.latLng.lng();
+                console.log(lat, lng);
+                $.ajax({
+                    url: '{{ route('api.updateLocation') }}',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        lat: lat,
+                        lng: lng,
+                        labour: Labour.id,
+                    },
+                    success: function (data) {
+                        //console.log(data)
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+                });
+            });
+            setLabourPosition(Labour.location);
+
+            var directionsService = new google.maps.DirectionsService;
+            var directionsDisplay = new google.maps.DirectionsRenderer;
+
+            directionsDisplay.setMap(map);
+
+            calculateAndDisplayRoute(directionsService, directionsDisplay,Godown.location,Site.location,map);
+
+            getDistance(Godown.location,Site.location, function (data) {
+                $('#distanceGS').html(data[0].distance.text);
+                $('#timeGS').html(data[0].duration.text);
+            });
+        }
+
+        function setLabourPosition(position) {
+            Labour.marker.setPosition(position);
+            getDistance(Labour.location,Site.location, function (data) {
+                $('#distanceLS').html(data[0].distance.text);
+                $('#timeLS').html(data[0].duration.text);
+            })
+        }
+
+        function getDistance(origin,destination,callback) {
+            var distanceMatrixService = new google.maps.DistanceMatrixService();
+            distanceMatrixService.getDistanceMatrix({
+                origins : [origin ],
+                destinations: [ destination ],
+                travelMode: google.maps.DirectionsTravelMode.DRIVING,
+                unitSystem: google.maps.UnitSystem.METRIC,
+                drivingOptions: {
+                    departureTime: new Date(Date.now() ),  // for the time N milliseconds from now.
+                    trafficModel: 'optimistic',
+                },
+                avoidHighways: false,
+                avoidTolls: false,
+            }, function (response, status) {
+                // See Parsing the Results for
+                // the basics of a callback function.
+                if(status === 'OK')
+                {
+                    var data = response.rows[0].elements;
+                    callback(data);
+                    console.log(data);
+                }
+            });
+        }
+
+        function calculateAndDisplayRoute(directionsService, directionsDisplay,origin,destination,map) {
+            directionsService.route({
+                origin: origin,
+                destination: destination,
+                travelMode: google.maps.DirectionsTravelMode.DRIVING,
+                unitSystem: google.maps.UnitSystem.METRIC
+            }, function (response, status) {
+                if (status === 'OK') {
+                    new google.maps.DirectionsRenderer({
+                        map: map,
+                        directions: response,
+                        suppressMarkers: true
+                    });
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+
+        })
     </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key={{ config('voyager.googlemaps.key') }}&callback=initMap"></script>
 @stop

@@ -8,6 +8,6 @@ class Good extends Model
 {
     public function godownTransfers()
     {
-        $this->hasMany('App\GodownTransfer');
+        return $this->hasMany('App\GodownTransfer');
     }
 }

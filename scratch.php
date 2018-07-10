@@ -1,6 +1,7 @@
 <?php
 
-function addSeller() {
+function addSeller()
+{
     $faker = Faker\Factory::create();
     $s = new App\Seller();
     $s->name = $faker->name;
@@ -10,7 +11,8 @@ function addSeller() {
     return $s;
 }
 
-function addGoods() {
+function addGoods()
+{
     $faker = Faker\Factory::create();
     $s = new App\Good();
     $s->name = $faker->word;
@@ -19,49 +21,54 @@ function addGoods() {
     return $s;
 }
 
-function addGodown() {
+function addGodown()
+{
     $faker = Faker\Factory::create();
     $s = new App\Godown();
     $s->name = $faker->company . " Godown";
-    $s->location = \App\Coordinates::newCoordinate($faker->latitude,$faker->longitude)->toGeometry();
+    $s->location = \App\Coordinates::newCoordinate($faker->latitude, $faker->longitude)->toGeometry();
     $s->address = $faker->address;
     $s->save();
     return $s;
 }
 
-function addPurchase() {
+function addPurchase()
+{
     $faker = Faker\Factory::create();
     $seller = \App\Seller::inRandomOrder()->first();
     $s = \App\Purchase::newPurchase()
         ->seller($seller)
         ->date(Carbon::parse($faker->date('Y-m-d')))
-        ->due(rand(0,500));
+        ->due(rand(0, 500));
     $godowns = \App\Godown::limit(5)->get()->shuffle();
     $goods = \App\Good::limit(5)->get()->shuffle();
-    foreach ($godowns as $godown){
-        $good = $goods[rand(0,4)];
-        $quantity = rand(1,100);
-        $cost = rand(100,3000);
-        $s->addItem($godown,$good,$quantity,$cost);
+    foreach ($godowns as $godown) {
+        $good = $goods[rand(0, 4)];
+        $quantity = rand(1, 100);
+        $cost = rand(100, 3000);
+        $s->addItem($godown, $good, $quantity, $cost);
     }
     $s->save();
     return $s;
 }
 
-function addSite() {
+function addSite()
+{
     $faker = Faker\Factory::create();
     $s = new App\Site();
     $s->name = $faker->company . " Site";
-    $s->location = \App\Coordinates::newCoordinate($faker->latitude,$faker->longitude)->toGeometry();
+    $s->location = \App\Coordinates::newCoordinate($faker->latitude, $faker->longitude)->toGeometry();
     $s->address = $faker->address;
     $s->save();
     return $s;
 }
 
-function addLabour() {
+function addLabour()
+{
     $faker = Faker\Factory::create();
     $s = new App\Labour();
-    $s->name = $faker->name ;
+    $s->name = $faker->userName;
+    $s->location = \App\Coordinates::newCoordinate($faker->latitude, $faker->longitude)->toGeometry();
     $s->password = bcrypt('password');
     $s->save();
     return $s;
@@ -70,19 +77,20 @@ function addLabour() {
 /**
  * @throws Exception
  */
-function addTransfer() {
-    $godown =  \App\Godown::inRandomOrder()->first();
-    $good =  \App\Good::inRandomOrder()->first();
+function addTransfer()
+{
+    $godown = \App\Godown::inRandomOrder()->first();
+    $good = \App\Good::inRandomOrder()->first();
     $site = \App\Site::inRandomOrder()->first();
     $labour = \App\Labour::inRandomOrder()->first();
-    $quantity = rand( 0 , $godown->hasGoods($good) );
-    $st = \App\SiteTransfer::newTransfer($godown,$good,$site,$labour,$quantity);
-    if($st){
-        $qty = $quantity > 1 ? $quantity/2 : $quantity;
-        $st->addActivity(0,\App\Status::GODOWN());
-        $st->addActivity($qty,\App\Status::SITE());
-        $st->addActivity(0,\App\Status::GODOWN());
-        $st->addActivity($qty,\App\Status::SITE());
+    $quantity = rand(0, $godown->hasGoods($good));
+    $st = \App\SiteTransfer::newTransfer($godown, $good, $site, $labour, $quantity);
+    if ($st) {
+        $qty = $quantity > 1 ? $quantity / 2 : $quantity;
+        $st->addActivity(0, \App\Status::GODOWN());
+        $st->addActivity($qty, \App\Status::SITE());
+        $st->addActivity(0, \App\Status::GODOWN());
+        $st->addActivity($qty, \App\Status::SITE());
     }
     return $st;
 }

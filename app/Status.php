@@ -11,6 +11,8 @@ class Status extends Model
         'CONFIRMED',
         'GODOWN',
         'SITE',
+        'COMPLETED',
+        'ACTIVE',
     ];
 
     public static function seedStatus()
@@ -63,6 +65,18 @@ class Status extends Model
     public static function SITE()
     {
         $id = Status::statusID("SITE");
+        return Status::find($id);
+    }
+
+    public static function COMPLETED()
+    {
+        $id = Status::statusID("COMPLETED");
+        return Status::find($id);
+    }
+
+    public static function ACTIVE()
+    {
+        $id = Status::statusID("ACTIVE");
         return Status::find($id);
     }
 }

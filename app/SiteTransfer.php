@@ -33,6 +33,16 @@ class SiteTransfer extends Model
         return $this->hasMany('App\SiteTransferDetail');
     }
 
+    public function goods()
+    {
+        return $this->siteGodownTransfers->first()->godownTransfer->goods;
+    }
+
+    public function godown()
+    {
+        return $this->siteGodownTransfers->first()->godownTransfer->godown;
+    }
+
     public function transferQuantity()
     {
         return $this->siteGodownTransfers->sum('quantity');

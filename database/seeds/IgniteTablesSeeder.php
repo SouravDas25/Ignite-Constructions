@@ -20,7 +20,7 @@ class IgniteTablesSeeder extends Seeder
         $this->TransferSeeder($faker);
     }
 
-    public function BasicSeeder($faker)
+    public function BasicSeeder(Faker\Factory $faker)
     {
         for($i = 0; $i < 10; $i++) {
             $s = new App\Seller();
@@ -55,7 +55,8 @@ class IgniteTablesSeeder extends Seeder
 
         for($i = 0; $i < 10; $i++) {
             $s = new App\Labour();
-            $s->name = $faker->name ;
+            $s->name = $faker->userName ;
+            $s->location = \App\Coordinates::newCoordinate($faker->latitude,$faker->longitude)->toGeometry();
             $s->password = bcrypt('password');
             $s->save();
         }
