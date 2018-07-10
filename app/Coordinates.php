@@ -29,6 +29,11 @@ class Coordinates
         return DB::raw("ST_GeomFromText('POINT({$lng} {$lat})')");
     }
 
+    public function toJson()
+    {
+        return json_encode($this);
+    }
+
     public static  function newCoordinate($latitude,$longitude)
     {
         return new \App\Coordinates($latitude,$longitude);

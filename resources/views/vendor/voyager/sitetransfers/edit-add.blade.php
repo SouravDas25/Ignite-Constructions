@@ -24,7 +24,7 @@
                     <form role="form"
                             class="form-edit-add pr-3 pl-3"
                             action="{{ route('voyager.site-transfers.store') }}"
-                            method="POST" enctype="multipart/form-data">
+                            method="POST" >
                         <!-- PUT Method if we are editing -->
                         
 

@@ -10,7 +10,7 @@ class SiteTransferDetail extends Model
 
     public function siteTransfer()
     {
-        $this->belongsTo('App\SiteTransfer');
+        return $this->belongsTo('App\SiteTransfer');
     }
 
     public static function addActivity(SiteTransfer $siteTransfer,int $quantity,Status $status)

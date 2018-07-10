@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use TCG\Voyager\Traits\Spatial;
 
 class Godown extends Model
 {
-    use Spatial;
+    use CoordinatesTrait;
+    protected $spatial = ['location'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -26,6 +26,14 @@ class Godown extends Model
         return $data;
     }
 
+    private function godownSiteTransfers()
+    {
+        $query = DB::table('site_godown_transfers');
+        $query->join('godown_transfers', 'site_godown_transfers.godown_transfer_id', '=', 'godown_transfers.id')
+            ->where('godown_id', $this->id);
+        return $query;
+    }
+
     public function getTransferableID(Good $goods)
     {
         $data = DB::table('godown_transfers')
@@ -41,14 +49,6 @@ class Godown extends Model
             $item->sentQty = (int)$item->sentQty;
         });
         return $data;
-    }
-
-    private function godownSiteTransfers()
-    {
-        $query = DB::table('site_godown_transfers');
-        $query->join('godown_transfers', 'site_godown_transfers.godown_transfer_id', '=', 'godown_transfers.id')
-            ->where('godown_id', $this->id);
-        return $query;
     }
 
 }

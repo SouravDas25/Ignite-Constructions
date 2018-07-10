@@ -2,24 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Status;
 use Illuminate\Http\Request;
-use TCG\Voyager\Http\Controllers\VoyagerBaseController;
-use Illuminate\Support\Facades\DB;
-use TCG\Voyager\Database\Schema\SchemaManager;
-use TCG\Voyager\Events\BreadDataAdded;
-use TCG\Voyager\Events\BreadDataDeleted;
-use TCG\Voyager\Events\BreadDataUpdated;
-use TCG\Voyager\Events\BreadImagesDeleted;
-use TCG\Voyager\Facades\Voyager;
-use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
 use App\Godown;
 use App\Site;
 use App\Labour;
 use App\Good;
 use App\SiteTransfer;
 
-class SiteTransfersController extends VoyagerBaseController
+class SiteTransfersController extends Controller
 {
+    public function index(Request $request)
+    {
+        $status_id = $request->input('status',null);
+        if(!$status_id)
+        {
+            $siteTransfers = SiteTransfer::all();
+        }
+        else {
+            $siteTransfers = SiteTransfer::where('status_id',$status_id)->get();
+        }
+
+        return view('vendor.voyager.sitetransfers.browse',compact('siteTransfers','status_id'));
+    }
+
+    public function show(Request $request,$id)
+    {
+        $siteTransfer = SiteTransfer::findOrFail($id);
+
+        //dd($siteTransfer->godown()->getLatLng());
+        return view('vendor.voyager.sitetransfers.read',compact('siteTransfer'));
+    }
+
     public function create(Request $request)
     {
         $godowns=Godown::all();
@@ -58,8 +72,5 @@ class SiteTransfersController extends VoyagerBaseController
         return redirect()->route('voyager.site-transfers.index');
     }
 
-    public function index(Request $request)
-    {
-        return view('vendor.voyager.sitetransfers.browse');
-    }
+
 }

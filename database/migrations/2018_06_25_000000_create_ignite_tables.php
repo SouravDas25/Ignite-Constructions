@@ -81,6 +81,7 @@ class CreateIgniteTables extends Migration
         Schema::create('labours', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique('name');
+            $table->geometry('location');
             $table->string('password');
             $table->timestamps();
         });

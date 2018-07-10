@@ -10,7 +10,8 @@ use TCG\Voyager\Traits\Spatial;
  */
 class Site extends Model
 {
-    use Spatial;
+    use CoordinatesTrait;
+    protected $spatial = ['location'];
 
     public function siteTransfers()
     {

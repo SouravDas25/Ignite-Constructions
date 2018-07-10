@@ -13,6 +13,10 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post('/updateLocation', 'TrackingController@updateLocation')->name('api.updateLocation');
+Route::post('/verifyUser', 'ApiController@verifyUser')->name('api.verifyUser');
+Route::get('/getTransferJob', 'ApiController@getTransferJob')->name('api.getTransferJob');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
