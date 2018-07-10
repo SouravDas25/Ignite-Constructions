@@ -15,6 +15,7 @@ use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
 
 use App\Godown;
 use App\GodownTransfer;
+use App\Good;
 
 class GodownsController extends VoyagerBaseController
 {
@@ -35,8 +36,19 @@ class GodownsController extends VoyagerBaseController
     public function show(Request $request, $id)
     {
         $godown=Godown::find($id);
+        $godownTransfers=GodownTransfer::where('godown_id','=',$id)->groupBy('goods_id')->get();
 
-        return view('vendor.voyager.godowns.read', compact('godown'));
+        $allGoods=[];
+        foreach($godownTransfers as $godownTransfer)
+        {
+            $good=$godownTransfer->goods;
+            $item = new \stdClass();
+            $item->name = $good->name;	
+            $item->quantity =$godown->hasGoods($good);	
+            array_push($allGoods,$item);
+        }
+
+        return view('vendor.voyager.godowns.read', compact('godown','allGoods'));
     }
 }
 
