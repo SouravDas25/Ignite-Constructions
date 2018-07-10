@@ -35,12 +35,12 @@
                                 </thead>
                                 <tbody>
                                     @if(count($godown->godownTransfers)>0)
-                                        @foreach($godown->godownTransfers as $godowntransfer)
+                                        @foreach($godown->godownTransfers as $godownTransfer)
                                             <tr>
-                                                <td>{{ $godownTransfer->purchases->goods->name }}</td>
+                                                <td>{{ $godownTransfer->goods->name }}</td>
                                                 <td>{{ $godownTransfer->quantity }}</td>
-                                                <td>{{ $godownTransfer->date }}</td>
-                                                <td>{{ $godownTransfer->purchases->sellers->name }}</td>
+                                                <td>{{ $godownTransfer->purchase->date }}</td>
+                                                <td>{{ $godownTransfer->purchase->seller->name }}</td>
                                                 {{-- <td><a class="btn btn-sm btn-danger hoverable waves-effect waves-light" data-toggle="modal" data-target="#delete_Modal"><i class="icon-trash-empty pr-2"></i> Delete</a></td> --}}
                                             </tr>
                                         @endforeach

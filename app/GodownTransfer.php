@@ -13,10 +13,7 @@ class GodownTransfer extends Model
         return $this->belongsTo('App\Godown');
     }
 
-    public function goods()
-    {
-        return $this->belongsTo('App\Good');
-    }
+    
 
     public function purchase()
     {
@@ -26,5 +23,10 @@ class GodownTransfer extends Model
     public function siteGodownTransfers()
     {
         return $this->hasMany('App\SiteGodownTransfer');
+    }
+
+    public function goods()
+    {
+        return $this->belongsTo('App\Good','goods_id');
     }
 }

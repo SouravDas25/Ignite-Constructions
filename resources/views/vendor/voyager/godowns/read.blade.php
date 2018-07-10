@@ -36,6 +36,16 @@
                                         <th>Quantity</th>
                                     </tr>
                                 </thead>
+                                <tbody>
+                                    @if(count($allGoods)>0)
+                                        @foreach($allGoods as $Good)
+                                            <tr>
+                                                <td>{{ $Good->name }}</td>
+                                                <td>{{ $Good->quantity }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
                             </table>
                         </div>
                     </div>

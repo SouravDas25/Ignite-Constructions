@@ -8,7 +8,6 @@
         <div class="row">
             <div class="col-lg-12 col-sm-12">
                 <h1 class="page-title"><i class="icon-upload"></i> Outgoing Purchases</h1>
-                <a href="" class="btn btn-success hoverable waves-effect waves-light"><i class="icon-plus-circled"></i> Add New</a>
                 <a href="{{ route('voyager.godowns.index') }}" class="btn btn-warning hoverable waves-effect waves-light"><i class="icon-th-list"></i> Return to list</a>
             </div>
         </div>
@@ -29,15 +28,25 @@
                                     <tr>
                                         <th>Goods Item</th>
                                         <th>Quantity</th>
-                                        <th>Cost</th>
                                         <th>Date</th>
                                         <th>Site</th>
                                         <th>Site Address</th>
-                                        {{-- <th class="text-right">Actions</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   
+                                    @foreach($godown->godownTransfers as $godownTransfer)
+                                        @if(count($godownTransfer->siteGodownTransfers)>0)
+                                            @foreach($godownTransfer->siteGodownTransfers as $siteGodownTransfer)
+                                                <tr>
+                                                    <td>{{ $godownTransfer->goods->name }}</td>
+                                                    <td>{{ $siteGodownTransfer->quantity }}</td>
+                                                    <td>{{ $siteGodownTransfer->siteTransfer->date }}</td>
+                                                    <td>{{ $siteGodownTransfer->siteTransfer->site->name }}</td>
+                                                    <td>{{ $siteGodownTransfer->siteTransfer->site->address }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
