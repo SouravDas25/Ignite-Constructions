@@ -14,6 +14,7 @@ class SiteTransfersController extends Controller
 {
     public function index(Request $request)
     {
+        $statuses=Status::all();
         $status_id = $request->input('status',null);
         if(!$status_id)
         {
@@ -23,7 +24,7 @@ class SiteTransfersController extends Controller
             $siteTransfers = SiteTransfer::where('status_id',$status_id)->get();
         }
 
-        return view('vendor.voyager.sitetransfers.browse',compact('siteTransfers','status_id'));
+        return view('vendor.voyager.sitetransfers.browse',compact('siteTransfers','status_id','statuses'));
     }
 
     public function show(Request $request,$id)
@@ -32,6 +33,12 @@ class SiteTransfersController extends Controller
 
         //dd($siteTransfer->godown()->getLatLng());
         return view('vendor.voyager.sitetransfers.read',compact('siteTransfer'));
+    }
+
+
+    public function edit(Request $request, $id)
+    {
+        
     }
 
     public function complete(Request $request,$id){
@@ -45,6 +52,7 @@ class SiteTransfersController extends Controller
         $st->confirmTransfer();
         return redirect()->back();
     }
+
 
     public function create(Request $request)
     {

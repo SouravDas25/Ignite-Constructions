@@ -89,10 +89,13 @@
                                     <td>{{ $transfer->labour->name }}</td>
                                     <td>{{ $transfer->status->details }}</td>
                                     <td>
-                                        <a class="btn btn-warning btn-sm pull-right"
-                                           href="{{ route('voyager.site-transfers.show',['id'=>$transfer->id]) }}">
-                                            View Transfer
-                                        </a>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="" class="btn btn-mdb-color" data-toggle="modal" data-target="#changeStatus">Change Status</a>
+                                            <a class="btn btn-warning btn-sm pull-right"
+                                            href="{{ route('voyager.site-transfers.show',['id'=>$transfer->id]) }}">
+                                                View Transfer
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -103,7 +106,32 @@
             </div>
         </div>
 
-        {{-- Single delete modal --}}
+
+        <div class="modal modal-warning fade" id="changeStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Change Status of this Transfer Job</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <select class="mdb-select colorful-select dropdown-primary" name="godown_id">
+                            <option value="" disabled selected>Choose an Option</option>
+                            @foreach($statuses as $status)
+                                <option value="{{ $status->id }}">{{ $status->details }}</option>
+                            @endforeach
+                        </select>
+                        <label class="pt-4">Job Statuses</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning btn-block">Save Change</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </div>
 
     
@@ -112,6 +140,12 @@
 
 
 @section('javascript')
-    <!-- DataTables -->
+    
+    <script>
+        $('document').ready(function ()
+        {
+            $('.mdb-select').material_select();
+        });
+    </script>
  
 @stop

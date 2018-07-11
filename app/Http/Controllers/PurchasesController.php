@@ -22,6 +22,12 @@ use App\Godown;
 class PurchasesController extends VoyagerBaseController
 {
 
+    public function show(Request $request,$id)
+    {
+        $purchase=Purchase::find($id);
+
+        return view('vendor.voyager.purchases.read', compact('purchase'));
+    } 
     public function edit(Request $request , $id)
     {
         $purchase=Purchase::findOrFail($id);
