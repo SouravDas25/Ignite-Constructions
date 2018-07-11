@@ -14,8 +14,10 @@ use Illuminate\Http\Request;
 */
 
 Route::post('/updateLocation', 'TrackingController@updateLocation')->name('api.updateLocation');
+Route::get('/getTransferDetails', 'ApiController@getTransferDetails')->name('api.getTransferDetails');
 Route::post('/verifyUser', 'ApiController@verifyUser')->name('api.verifyUser');
 Route::get('/getTransferJob', 'ApiController@getTransferJob')->name('api.getTransferJob');
+Route::post('/confirmTransferJob', 'ApiController@confirmTransferJob')->name('api.confirmTransferJob');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

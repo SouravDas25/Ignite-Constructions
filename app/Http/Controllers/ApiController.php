@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Labour;
+use App\SiteTransfer;
+use App\Status;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -36,30 +38,78 @@ class ApiController extends Controller
     {
         $labour_id = $request->input('labour',null);
         if(!$labour_id) {
-            return response()->json([]);
+            return response()->json(['status'=>'ERROR','data' => 'Invalid Labour ID']);
         }
+        $siteTransfer_id = $request->input('st_id',null);
         $labour = Labour::findOrFail($labour_id);
         $data = new \stdClass();
-        $st = $labour->siteTransfers->first();
+        $st = ($siteTransfer_id) ? SiteTransfer::findOrFail($siteTransfer_id) :
+            $labour->siteTransfers->where('status_id',Status::PENDING()->id)->first();
         if($st) {
-            $data->status = "SUCCESS";
+            $data->siteTransfer_id = $st->id;
             $data->godown = [
                 'id' => $st->godown()->id,
                 'name' => $st->godown()->name,
+                'address' => $st->godown()->address,
                 'location' => $st->godown()->getLatLng(),
             ];
             $data->site = [
                 'id' => $st->site->id,
                 'name' => $st->site->name,
+                'address' => $st->site->address,
                 'location' => $st->site->getLatLng(),
             ];
             $data->goods = [
                 'id' => $st->goods()->id,
                 'name' => $st->goods()->name,
                 'quantity' => $st->transferQuantity(),
+                'details' => $st->goods()->details
             ];
         }
 
-        return response()->json(['data' => $data]);
+        return response()->json(['status'=>'SUCCESS','data' => $data]);
+    }
+
+    public function confirmTransferJob(Request $request)
+    {
+        $siteTransfer_id = $request->input('st_id',null);
+        if(!$siteTransfer_id) {
+            return response()->json(['status'=>'ERROR','data' => 'Invalid SiteTransfer ID']);
+        }
+        $st = SiteTransfer::findOrFail($siteTransfer_id);
+        $st->confirmTransfer();
+        return response()->json(['status'=>'SUCCESS','data' => 'Transfer Confirmed']);
+    }
+
+    public function getTransferDetails(Request $request)
+    {
+        $siteTransfer_id = $request->input('st_id',null);
+        if(!$siteTransfer_id) {
+            return response()->json(['status'=>'ERROR','data' => 'Invalid SiteTransfer ID']);
+        }
+        $st = SiteTransfer::find($siteTransfer_id);
+        return $st->transferDetails;
+        /*return response()->json([
+            'data' => [
+                [
+                    'title' => 'Reached Godown Location',
+                    'time' => "3 hours ago",
+                    'des' => " blah blah",
+                    'sml' =>"this is small text"
+                ],
+                [
+                    'title' => 'Reached Godown Location',
+                    'time' => "3 hours ago",
+                    'des' => " blah blah",
+                    'sml' =>"this is small text"
+                ],
+                [
+                    'title' => 'Reached Godown Location',
+                    'time' => "3 hours ago",
+                    'des' => " blah blah",
+                    'sml' =>"this is small text"
+                ],
+            ],
+        ]);*/
     }
 }

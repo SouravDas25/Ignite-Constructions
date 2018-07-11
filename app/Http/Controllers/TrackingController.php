@@ -15,15 +15,15 @@ class TrackingController extends Controller
      */
     public function updateLocation(Request $request)
     {
-        $data = $request->validate([
-            'lat' => 'required',
-            'lng' => 'required',
-            'labour' => 'required',
-        ]);
-        $labour = Labour::findOrFail($data['labour']);
-        $location = new Coordinates($data['lat'],$data['lng']);
-        $labour->updateLocation($location);
+        $labour_id = $request->input('labour',null);
+        $lat = $request->input('lat',null);
+        $lng = $request->input('lng',null);
+        if($labour_id === null) return response()->json(['status'=>'ERROR','data'=>'Labour ID not found']);
+        if($lat === null || $lng === null )return response()->json(['status'=>'ERROR','data'=>'Location Incorrect']);
+        $labour = Labour::findOrFail($labour_id);
+        $location = new Coordinates($lat,$lng);
         event(new SendLocation($labour,$location));
-        return response()->json(['status'=>'success', 'data'=>$location]);
+        $labour->updateLocation($location);
+        return response()->json(['status'=>'success', 'data'=> $location ]);
     }
 }

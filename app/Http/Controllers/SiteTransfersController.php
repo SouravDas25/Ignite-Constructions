@@ -40,6 +40,20 @@ class SiteTransfersController extends Controller
     {
         
     }
+
+    public function complete(Request $request,$id){
+        $st = SiteTransfer::findOrFail($id);
+        $st->completeTransfer();
+        return redirect()->back();
+    }
+
+    public function confirm(Request $request,$id){
+        $st = SiteTransfer::findOrFail($id);
+        $st->confirmTransfer();
+        return redirect()->back();
+    }
+
+
     public function create(Request $request)
     {
         $godowns=Godown::all();
