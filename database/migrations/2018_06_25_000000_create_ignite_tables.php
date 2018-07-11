@@ -83,6 +83,7 @@ class CreateIgniteTables extends Migration
             $table->string('name')->unique('name');
             $table->geometry('location');
             $table->string('password');
+            $table->integer('activeTransfer_id')->unsigned()->nullable();
             $table->timestamps();
         });
 
@@ -119,13 +120,12 @@ class CreateIgniteTables extends Migration
             $table->increments('id');
             $table->integer('site_transfer_id')->unsigned()->index('fk_site_transfer_details_site_transfer');
             $table->dateTime('datetime');
-            $table->integer('quantity');
-            $table->integer('status_id')->unsigned()->index('fk_site_transfer_details_status_id');
+            $table->string('title');
+            $table->text('details')->nullable();
+            $table->tinyInteger('journey_status')->nullable();
             $table->timestamps();
             $table->foreign('site_transfer_id', 'fk_site_transfer_details_site_transfer')
                 ->references('id')->on('site_transfers')->onUpdate('RESTRICT')->onDelete('RESTRICT');
-            $table->foreign('status_id', 'fk_site_transfer_details_status_id')
-                ->references('id')->on('statuses')->onUpdate('RESTRICT')->onDelete('RESTRICT');
         });
     }
 
