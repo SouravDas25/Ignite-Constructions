@@ -19,6 +19,9 @@
         Status :
         <span class="badge badge-primary"> {{ $siteTransfer->status->details }}</span>
     </div>
+    <div class="float-right page-title">
+        Labour : {{ $siteTransfer->labour->name }}
+    </div>
     <style>
         #map {
             height: 600px;

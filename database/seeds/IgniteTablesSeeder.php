@@ -61,6 +61,10 @@ class IgniteTablesSeeder extends Seeder
             $s->save();
         }
 
+        $s = new \App\Unit();
+        $s->name = "Unit(s)";
+        $s->save();
+
     }
 
 

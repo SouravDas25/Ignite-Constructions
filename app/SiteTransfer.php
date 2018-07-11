@@ -69,27 +69,33 @@ class SiteTransfer extends Model
     }
 
     /**
-     * @return SiteTransfer
+     * @return bool
      * @throws \Exception
      */
     public function confirmTransfer()
     {
+        if($this->status->id == Status::CONFIRMED()->id)
+            return false;
         $details = 'Started Journey Towards Godown, Beginning Of Trip 1';
         $this->addActivity(JourneyStatus::STARTED,'Site Transfer Commenced',$details);
         $this->labour->updateActiveTransfer($this->id);
-        return $this->updateStatus(Status::CONFIRMED());
+        $this->updateStatus(Status::CONFIRMED());
+        return true;
     }
 
     /**
-     * @return SiteTransfer
+     * @return bool
      * @throws \Exception
      */
     public function completeTransfer()
     {
+        if($this->status->id == Status::COMPLETED()->id)
+            return false;
         $details = 'Transfer Completed with ' . $this->transferDetails->count() . ' Trip(s).';
         $this->addActivity(JourneyStatus::COMPLETED,'Site Transfer Completed',$details);
         $this->labour->updateActiveTransfer(null);
-        return $this->updateStatus(Status::COMPLETED());
+        $this->updateStatus(Status::COMPLETED());
+        return true;
     }
 
     public function isCompleted()
