@@ -95,5 +95,7 @@ function addTransfer()
     return $st;
 }
 
-
+$labour = \App\Labour::find(10);
+$loc = $labour->getLatLng();
+$st = \App\SiteTransfer::find(1);
 //$st->updateGoods($godown,$goods,10);
