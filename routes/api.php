@@ -18,6 +18,7 @@ Route::get('/getTransferDetails', 'ApiController@getTransferDetails')->name('api
 Route::post('/verifyUser', 'ApiController@verifyUser')->name('api.verifyUser');
 Route::get('/getTransferJob', 'ApiController@getTransferJob')->name('api.getTransferJob');
 Route::post('/confirmTransferJob', 'ApiController@confirmTransferJob')->name('api.confirmTransferJob');
+Route::post('/completeTransferJob', 'ApiController@completeTransferJob')->name('api.completeTransferJob');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

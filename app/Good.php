@@ -10,4 +10,9 @@ class Good extends Model
     {
         return $this->hasMany('App\GodownTransfer');
     }
+
+    public function unit()
+    {
+        return $this->belongsTo('App\Unit');
+    }
 }

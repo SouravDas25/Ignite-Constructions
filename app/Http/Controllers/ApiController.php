@@ -44,7 +44,7 @@ class ApiController extends Controller
         $labour = Labour::findOrFail($labour_id);
         $data = new \stdClass();
         $st = ($siteTransfer_id) ? SiteTransfer::findOrFail($siteTransfer_id) :
-            $labour->siteTransfers->where('status_id',Status::PENDING()->id)->first();
+            $labour->siteTransfers->where('status_id','!=',Status::COMPLETED()->id)->first();
         if($st) {
             $data->siteTransfer_id = $st->id;
             $data->godown = [
@@ -79,6 +79,17 @@ class ApiController extends Controller
         $st = SiteTransfer::findOrFail($siteTransfer_id);
         $st->confirmTransfer();
         return response()->json(['status'=>'SUCCESS','data' => 'Transfer Confirmed']);
+    }
+
+    public function completeTransferJob(Request $request)
+    {
+        $siteTransfer_id = $request->input('st_id',null);
+        if(!$siteTransfer_id) {
+            return response()->json(['status'=>'ERROR','data' => 'Invalid SiteTransfer ID']);
+        }
+        $st = SiteTransfer::findOrFail($siteTransfer_id);
+        $st->completeTransfer();
+        return response()->json(['status'=>'SUCCESS','data' => 'Transfer Completed']);
     }
 
     public function getTransferDetails(Request $request)

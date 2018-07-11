@@ -9,10 +9,7 @@ class Status extends Model
     public static $items = [
         'PENDING',
         'CONFIRMED',
-        'GODOWN',
-        'SITE',
         'COMPLETED',
-        'ACTIVE',
     ];
 
     public static function seedStatus()

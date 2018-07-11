@@ -21,11 +21,20 @@ class CreateIgniteTables extends Migration
             $table->timestamps();
         });
 
+        Schema::create('units', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamps();
+        });
+
         Schema::create('goods', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('details');
+            $table->integer('unit_id')->unsigned()->index('fk_goods_unit');
             $table->timestamps();
+            $table->foreign('unit_id', 'fk_goods_unit')
+                ->references('id')->on('unit')->onUpdate('RESTRICT')->onDelete('RESTRICT');
         });
 
         Schema::create('godowns', function (Blueprint $table) {
