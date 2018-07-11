@@ -35,11 +35,18 @@ class SiteTransfersController extends Controller
         return view('vendor.voyager.sitetransfers.read',compact('siteTransfer'));
     }
 
-
-    public function edit(Request $request, $id)
-    {
-        
+    public function complete(Request $request,$id){
+        $st = SiteTransfer::findOrFail($id);
+        $st->completeTransfer();
+        return redirect()->back();
     }
+
+    public function confirm(Request $request,$id){
+        $st = SiteTransfer::findOrFail($id);
+        $st->confirmTransfer();
+        return redirect()->back();
+    }
+
     public function create(Request $request)
     {
         $godowns=Godown::all();

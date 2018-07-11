@@ -10,9 +10,15 @@
     <h1 class="page-title">
         <i class="icon-switch"></i> Site Transfer&nbsp;
     </h1>
-    <a class="btn btn-primary btn-lg">
-        Activity List
-    </a>
+    @if( !$siteTransfer->isCompleted() )
+        <a class="btn btn-success btn-lg" href="{{ route('voyager.site-transfers.complete',['id'=>$siteTransfer->id]) }}">
+            Complete Transfer
+        </a>
+    @endif
+    <div class="float-right page-title">
+        Status :
+        <span class="badge badge-primary"> {{ $siteTransfer->status->details }}</span>
+    </div>
     <style>
         #map {
             height: 600px;
@@ -51,7 +57,7 @@
                 'infoCardName' => 'Godown',
                 'infoCardTitle' => $siteTransfer->godown()->name,
                 'infoCardSubTitle' => $siteTransfer->godown()->address,
-                'infoCardColor' => 'bg-warning',
+                'infoCardColor' => 'bg-primary',
                 'infoCardIcon' => 'fa map-icon map-icon-store',
                 ])
                 @endcomponent
@@ -81,10 +87,28 @@
             </div>
         </div>
         <div class="row mt-4">
-            <div class="col-md-12">
+            <div class="col-md-9">
                 <div class="card pb-0" style="padding-bottom:5px;" id="app">
                     <div class="">
                         <div id="map" class="card-body"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 " >
+                <h5 class="h5-responsive">Activity List</h5>
+                <hr>
+                <div  style="overflow-y: scroll;height: 550px">
+                    <div class="list-group" id="activityListApp">
+                        <a href="#" v-for="item in activityList"
+                           class="list-group-item list-group-item-success list-group-item-action flex-column align-items-start card mb-1">
+                            <div class="d-flex w-100 justify-content-between py-3">
+                                <div class="mb-1 font-weight-bold"> @{{ item.title }}</div>
+                                <small><i class="fa fa-clock-o" aria-hidden="true"></i> @{{ item.time }}</small>
+                            </div>
+                            <p class="mb-1">
+                                <small> @{{ item.des }} @{{ item.sml }}</small>
+                            </p>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -113,7 +137,7 @@
                 @component('includes.infoCard',[
                 'infoCardName' => 'Goods',
                 'infoCardTitle' => $siteTransfer->goods()->name,
-                'infoCardColor' => 'bg-primary',
+                'infoCardColor' => 'bg-warning',
                 'infoCardSubTitle' => $siteTransfer->goods()->details,
                 'infoCardIcon' => 'fa voyager-puzzle',])
 
@@ -133,7 +157,7 @@
     <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
     <script src="{{ asset('/js/map-icons.js') }}"></script>
     <script>
-        Pusher.logToConsole = true;
+        Pusher.logToConsole = false;
         var pusher = new Pusher('d23ff382e22f5abbe1f9', {
             cluster: 'ap2',
             encrypted: true
@@ -144,7 +168,8 @@
             data = data.data;
             if (data.labour_id == Labour.id) {
                 setLabourPosition(data.location);
-                console.log(data);
+                //console.log(data);
+                updateActivityList();
             }
         });
 
@@ -185,6 +210,7 @@
             Godown.marker = new mapIcons.Marker({
                 map: map,
                 position: Godown.location,
+                title : 'Godown',
                 icon: {
                     path: mapIcons.shapes.MAP_PIN,
                     fillColor: '#ff4444',
@@ -195,9 +221,32 @@
                 map_icon_label: '<span class="map-icon map-icon-store"></span>'
             });
 
+            Godown.circle = new google.maps.Circle({
+                strokeColor: 'blue',
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                fillColor: 'blue',
+                fillOpacity: 0.2,
+                map: map,
+                center: Godown.location,
+                radius: parseFloat("{{ setting('admin.detectRadius') }}"),
+            });
+
+            Godown.largeCircle = new google.maps.Circle({
+                strokeColor: 'blue',
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                fillColor: 'blue',
+                fillOpacity: 0.1,
+                map: map,
+                center: Godown.location,
+                radius: parseFloat("{{ setting('admin.detectRadius') }}")*2,
+            });
+
             Site.marker = new mapIcons.Marker({
                 map: map,
                 position: Site.location,
+                title : 'Work Site',
                 icon: {
                     path: mapIcons.shapes.MAP_PIN,
                     fillColor: '#FF8800',
@@ -208,10 +257,33 @@
                 map_icon_label: '<span class="map-icon map-icon-travel-agency"></span>'
             });
 
+            Site.circle = new google.maps.Circle({
+                strokeColor: 'blue',
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                fillColor: 'blue',
+                fillOpacity: 0.2,
+                map: map,
+                center: Site.location,
+                radius: parseFloat("{{ setting('admin.detectRadius') }}"),
+            });
+
+            Site.largeCircle = new google.maps.Circle({
+                strokeColor: 'blue',
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                fillColor: 'blue',
+                fillOpacity: 0.1,
+                map: map,
+                center: Site.location,
+                radius: parseFloat("{{ setting('admin.detectRadius') }}")*2,
+            });
+
             Labour.marker = new mapIcons.Marker({
                 map: map,
                 position: Labour.location,
                 draggable: true,
+                title : 'Driver',
                 icon: {
                     path: mapIcons.shapes.MAP_PIN,
                     fillColor: '#00C851',
@@ -232,13 +304,12 @@
                     url: '{{ route('api.updateLocation') }}',
                     method: 'POST',
                     data: {
-                        _token: '{{ csrf_token() }}',
                         lat: lat,
                         lng: lng,
                         labour: Labour.id,
                     },
                     success: function (data) {
-                        //console.log(data)
+                        console.log(data)
                     },
                     error: function (error) {
                         console.log(error)
@@ -261,7 +332,12 @@
         }
 
         function setLabourPosition(position) {
-            Labour.marker.setPosition(position);
+            //Labour.marker.setPosition(position);
+            newposition = new google.maps.LatLng(position);
+            Labour.marker.animateTo( newposition, {  easing: "linear",
+                duration: 1000,
+            });
+
             getDistance(Labour.location,Site.location, function (data) {
                 $('#distanceLS').html(data[0].distance.text);
                 $('#timeLS').html(data[0].duration.text);
@@ -312,10 +388,34 @@
             });
         }
 
-        $(document).ready(function () {
+        function updateActivityList() {
+            $.ajax({
+                url : '{{ route('api.getTransferDetails',['st_id'=>$siteTransfer->id]) }}',
+                success : function (data) {
+                    console.log(data);
+                    //Vue.set()
+                    activityApp.activityList = data;
+                    toastr['info']('Activity Updated.');
+                },
+                error : function (error) {
+                    console.log(error);
+                }
+            });
+        }
 
+        var activityList = [];
+        var activityApp;
+        $(document).ready(function () {
+            initMap();
+            activityApp = new Vue({
+                el : '#activityListApp',
+                data : {
+                    activityList : activityList,
+                }
+            });
+            updateActivityList();
         })
     </script>
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key={{ config('voyager.googlemaps.key') }}&callback=initMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ config('voyager.googlemaps.key') }}"></script>
+    <script src="{{ asset('/js/markerAnimate.js') }}"></script>
 @stop

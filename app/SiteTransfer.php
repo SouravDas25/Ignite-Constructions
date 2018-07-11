@@ -30,7 +30,7 @@ class SiteTransfer extends Model
 
     public function transferDetails()
     {
-        return $this->hasMany('App\SiteTransferDetail');
+        return $this->hasMany('App\SiteTransferDetail')->orderBy('datetime');
     }
 
     public function goods()
@@ -48,9 +48,9 @@ class SiteTransfer extends Model
         return $this->siteGodownTransfers->sum('quantity');
     }
 
-    public function addActivity(int $quantity,Status $status)
+    public function addActivity(int $js,string $title,string $details,$quantity = null)
     {
-        return SiteTransferDetail::addActivity($this,$quantity,$status);
+        return SiteTransferDetail::addActivity($this,$js,$title,$details,$quantity);
     }
 
     /**
@@ -58,7 +58,7 @@ class SiteTransfer extends Model
      * @return SiteTransfer
      * @throws \Exception
      */
-    public function updateStatus(Status $status)
+    private function updateStatus(Status $status)
     {
         $this->status_id = $status->id;
         $THIS = $this;
@@ -66,6 +66,55 @@ class SiteTransfer extends Model
             $THIS->save();
         });
         return $this;
+    }
+
+    /**
+     * @return SiteTransfer
+     * @throws \Exception
+     */
+    public function confirmTransfer()
+    {
+        $details = 'Started Journey Towards Godown, Beginning Of Trip 1';
+        $this->addActivity(JourneyStatus::STARTED,'Site Transfer Commenced',$details);
+        $this->labour->updateActiveTransfer($this->id);
+        return $this->updateStatus(Status::CONFIRMED());
+    }
+
+    /**
+     * @return SiteTransfer
+     * @throws \Exception
+     */
+    public function completeTransfer()
+    {
+        $details = 'Transfer Completed with ' . $this->transferDetails->count() . ' Trip(s).';
+        $this->addActivity(JourneyStatus::COMPLETED,'Site Transfer Completed',$details);
+        $this->labour->updateActiveTransfer(null);
+        return $this->updateStatus(Status::COMPLETED());
+    }
+
+    public function isCompleted()
+    {
+        if($this->status->id === Status::COMPLETED()->id){
+            return true;
+        }
+        return false;
+    }
+
+    public function isPending()
+    {
+        if($this->status->id === Status::PENDING()->id){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return SiteTransfer
+     * @throws \Exception
+     */
+    public function activateTransfer()
+    {
+        return $this->updateStatus(Status::ACTIVE());
     }
 
     /**
