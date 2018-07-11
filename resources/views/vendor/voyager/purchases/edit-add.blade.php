@@ -19,180 +19,139 @@
         <div class="row">
             <div class="col-md-12">
 
-                <div class="panel panel-bordered">
+                <div class="panel panel-bordered ">
                     <!-- form start -->
-                    <form role="form"
-                          class="form-edit-add pr-3 pl-3 pt-4"
-                          action="{{ (isset($purchase->id)) ? route('voyager.purchases.update', $purchase->id) : route('voyager.purchases.store') }}"
-                          method="POST" enctype="multipart/form-data">
-                        <!-- PUT Method if we are editing -->
+                    <form role="form" id="VueApp"
+                        class="form-edit-add pr-3 pl-3 pt-4"
+                        action="{{ (isset($purchase->id)) ? route('voyager.purchases.update', $purchase->id) : route('voyager.purchases.store') }}"
+                        method="POST" enctype="multipart/form-data">
+                    <!-- PUT Method if we are editing -->
 
-                    @if(isset($purchase->id))
-                        {{ method_field("PUT") }}
-                    @endif
+                @if(isset($purchase->id))
+                    {{ method_field("PUT") }}
+                @endif
 
-                    <!-- CSRF TOKEN -->
-                        {{ csrf_field() }}
+                <!-- CSRF TOKEN -->
+                    {{ csrf_field() }}
 
-                        <div class="panel-body">
+                    <div class="panel-body">
 
-                            @if (count($errors) > 0)
-                                <div class="alert alert-danger" role="alert">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
-                            <div class="form-group">
-                                <select class="mdb-select colorful-select dropdown-primary" name="seller_id">
-                                    <option value="{{isset($purchase->id) ? $purchase->seller_id : "" }}" disabled selected>{{ isset($purchase->id) ? $purchase->seller->name : 'Choose an Option' }}</option>
-                                    @foreach($sellers as $seller)
-                                        <option value="{{ $seller->id }}">{{ $seller->name }}</option>
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger" role="alert">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
                                     @endforeach
-                                </select>
-                                <label>Seller</label>
+                                </ul>
                             </div>
+                        @endif
 
-                            <div>
-                                <button class="btn btn-primary hoverable waves-effect waves-light" type="button" data-toggle="collapse" data-target="#quantityDistribution" aria-expanded="false" aria-controls="collapseExample">
-                                    Quantity Distribution
-                                </button>
-                            </div>
-                            
-                            <div class="collapse" id="quantityDistribution">
-                                <div class="mr-3 mt-3">
-                                    <div class="container-fluid">
+                        <div class="form-group">
+                            <label>Seller</label>
+                            <select class="browser-default" name="seller_id">
+                                <option value="" disabled {{ !isset($purchase) ? 'selected' : '' }} >Choose an Option</option>
+                                @php $selectSeller_id = isset($purchase) ? $purchase->seller_id : old('seller_id') @endphp
+                                @foreach($sellers as $seller)
+                                    <option value="{{ $seller->id }}" {{ isset($selectSeller_id) && $selectSeller_id== $seller->id  ? 'selected' : "" }}>
+                                        {{ $seller->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-lg-12 mx-0" >
+                                <div class="panel grey lighten-3 z-depth-3 panel-bordered">
+                                    <div class="panel-body">
+                                        <h5><b>Add items to purchase</b></h5>
+                                        <hr>
                                         <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="panel grey lighten-3 z-depth-3 panel-bordered">
-                                                    <div class="panel-body">
-                                                        <h5><b>Select the followings</b></h5>
-                                                        <hr>
-                                                        <div class="row">
-                                                            <div class="col-lg-3 pt-4 form-group">
-                                                                <select class="mdb-select colorful-select dropdown-primary" name="godown_id">
-                                                                    <option value="" disabled selected>Choose an option</option>
-                                                                    @foreach($godowns as $godown)
-                                                                        <option value="{{ $godown->id }}">{{ $godown->name }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                                <label class="pt-4">Godown</label> 
-                                                            </div>
-                                                            <div class="col-lg-3 pt-4 form-group">
-                                                                <select class="mdb-select colorful-select dropdown-primary" name="good_id">
-                                                                    <option value="" disabled selected>Choose an option</option>
-                                                                    @foreach($goods as $good)
-                                                                        <option value="{{ $good->id }}">{{ $good->name }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                                <label class="pt-4">Good</label> 
-                                                            </div>
-                                                            <div class="col-lg-3 form-group">
-                                                                <label for="quantity">Quantity</label>
-                                                                <input type="number" id="quantity" name="quantity" class="form-control">
-                                                            </div>
-                                                            <div class="col-lg-3 pt-4 form-group">
-                                                                <button class="btn btn-success hoverable waves-effect waves-light"><i class="voyager-plus pr-2"></i>Add</button>
-                                                            </div>
-                                                        </div>
-
-                                                        @if(isset($purchase->id))
-                                                            <div class="table-responsive">
-                                                                <table class="table table-hover">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Godowns</th>
-                                                                            <th>Goods</th>
-                                                                            <th>Quantity</th>
-                                                                            <th>Action</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        @foreach($purchase->godownTransfers as $godownTransfer)
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <input type="text" id="godown" name="godown" value="{{ $godownTransfer->godown->name }}" class="form-control">
-                                                                                </td>
-                                                                                <td>
-                                                                                    <input type="text" id="good" name="good" value="{{ $godownTransfer->goods->name }}" class="form-control">
-                                                                                </td>
-                                                                                <td>
-                                                                                    <input type="text" id="quantity" name="quantity" value="{{ $godownTransfer->quantity }}" class="form-control">
-                                                                                </td>
-                                                                                <td>
-                                                                                    <button class="btn btn-danger btn-sm hoverable waves-effects waves-light"><i class="icon-trash-empty"></i> Remove</button>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endforeach
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        @endif
-
-                                                        <div class="row">
-                                                            <div class="col-lg-12 pt-3">
-                                                                <button class="btn btn-amber hoverable btn-lg btn-block waves-effect waves-dark">Save Changes</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <div class="col-lg-3 form-group">
+                                                <label >Godown</label>
+                                                <select class="browser-default" 
+                                                name="godown_id" id="godown_id">
+                                                    <option value="" disabled selected>Choose an option</option>
+                                                    <option v-for="items in godowns" 
+                                                    v-bind:value="items.val">
+                                                        @{{ items.text }}
+                                                    </option>
+                                                </select>
                                             </div>
+                                            <div class="col-lg-3 form-group">
+                                                <label >Good</label>
+                                                <select class="browser-default" id="good_id"
+                                                name="good_id">
+                                                    <option value="" disabled selected>Choose an option</option>
+                                                    <option v-for="items in goods" 
+                                                    v-bind:value="items.val">
+                                                        @{{ items.text }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-3 form-group">
+                                                <label for="quantity">Quantity</label>
+                                                <input type="number" id="quantity" v-model.number="quantity"
+                                                name="quantity" class="form-control">
+                                            </div>
+                                            <div class="col-lg-3 pt-4 form-group">
+                                                <button v-on:click="additem" type="button"
+                                                class="btn btn-success btn-lg btn-block hoverable waves-effect waves-light"><i class="voyager-plus pr-2"></i>Add</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Godowns</th>
+                                                        <th>Goods</th>
+                                                        <th>Quantity</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                        <tr v-for="(item, index) in allocation">
+                                                            <td>
+                                                                @{{ item.godown_name }}
+                                                            </td>
+                                                            <td>
+                                                                @{{ item.good_name }}
+                                                            </td>
+                                                            <td>
+                                                                @{{ item.qty }}
+                                                            </td>
+                                                            <td>
+                                                                <button v-on:click="removeitem(index,$event)" type="button"
+                                                                class="btn btn-danger btn-sm float-right waves-effects waves-light"><i class="icon-trash-empty"></i> Remove</button>
+                                                            </td>
+                                                        </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            
-                            @if(isset($purchase->id))
-                                <div class="row">
-                                    <div class="col-lg-12 pt-3">
-                                        <div class="card grey lighten-3">
-                                            <div class="card-header blue-grey white-text">
-                                                Purchased Goods Details
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="table-responsive">
-                                                    <table class="table table-hover">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Godowns</th>
-                                                                <th>Goods</th>
-                                                                <th>Quantity</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach($purchase->godownTransfers as $godownTransfer)
-                                                                <tr>
-                                                                    <td>{{ $godownTransfer->godown->name }}</td>
-                                                                    <td>{{ $godownTransfer->goods->name }}</td>
-                                                                    <td>{{ $godownTransfer->quantity }}</td>
-                                                                </tr>                                                                    </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                                    
-                            <div class="form-group pt-2">
-                                <label for="date">Date</label>
-                                <input type="date" id="Date" name="date" value="@if(isset($purchase->id)){{ $purchase->date }}@endif" class="form-control">
-                            </div>
-
                         </div>
-
-                        <div class="panel-footer form-group pt-4">
-                            <button type="submit" class="btn btn-info hoverable waves-effect waves-light save">
-                                <i class="icon-flash"></i> {{__('voyager::generic.save') }}
-                            </button>
+                                
+                        <div class="form-group pt-2">
+                            <label for="date">Date</label>
+                        <input type="date" id="Date" name="date" value="{{ isset($purchase) ? $purchase->date : old('date') }}" class="form-control">
                         </div>
-                    </form>
+                        <div class="form-group pt-2">
+                            <label for="purchase_due">Puchase Due</label>
+                            <input type="number" id="purchase_due" name="purchase_due" 
+                            value="{{ isset($purchase) ? $purchase->purchase_due : old('purchase_due') }}" class="form-control">
+                        </div>
+                        <input name="itemList" id="itemList" type="hidden">
+                    </div>
+
+                    <div class="panel-footer form-group pt-4">
+                        <button type="button" onclick="submitForm()"
+                        class="btn btn-info hoverable waves-effect waves-light save">
+                            <i class="icon-flash"></i> {{__('voyager::generic.save') }}
+                        </button>
+                    </div>
+                </form>
                 </div>
             </div>
         </div>
@@ -207,52 +166,34 @@
         var params = {};
         var $image;
 
-        var ModelGodowns = {};
-        var Quantity = {total: 0, rem: 0};
+        var ModelGodowns = [];
 
-        function submitQSModal() {
-            //alert("lol");
-            var obj = $('#OPENQSMODALBTN');
-            obj.removeClass('btn-success');
-            obj.addClass('btn-primary');
-            obj.text("Submit");
-            obj = $('#QS_DisplayTABLE');
-            obj.html('');
-            for (var key in ModelGodowns) {
-                if (ModelGodowns.hasOwnProperty(key)) {
-                    var item = ModelGodowns[key];
-                    var html = `<tr><td>${item.name}</td><td>${item.qty}</td></tr>`;
-                    obj.append(html);
-                }
-            }
+        function submitForm()
+        {
+            var data = JSON.stringify(ModelGodowns);
+            $('#itemList').val(data);
+            $('#VueApp').submit();
         }
-
-        function UpdateQABTN() {
-            var value = $('#quantity').val();
-            var obj = $('#QuantityAllocationBTN');
-            //console.log(value,value && isNaN(value) === false);
-            if( value && isNaN(value) === false){
-                obj.removeClass('disabled');
-                obj.removeClass('btn-flat');
-            }
-            else {
-                obj.addClass('disabled');
-                obj.addClass('btn-flat');
-            }
-        }
+        
 
         $('document').ready(function () {
 
-            
+            //$('.select2').mdb_select();
+            //$('.mdb-select').material_select();
 
             var app = new Vue({
                 el: '#VueApp',
                 data: {
-                    quantity : Quantity.total,
+                    quantity : 0,
                     godowns : [
-                        { val : 1 , text : "Godown 1"},
-                        { val : 2 , text : "Godown 2"},
-                        { val : 3 , text : "Godown 3"},
+                        @foreach($godowns as $godown)
+                        { val : '{{ $godown->id }}' ,text : '{{ $godown->name }}' },
+                        @endforeach
+                    ],
+                    goods : [
+                        @foreach($goods as $good)
+                        { val : '{{ $good->id }}' ,text : '{{ $good->name }}' },
+                        @endforeach
                     ],
                     allocation : ModelGodowns,
                 },
@@ -269,89 +210,46 @@
                     }
                 },
                 methods : {
-                    addGodown : function (event) {
-                        var gSelect = $('#QS_GODOWN_NAME option:selected');
-                        var gName = gSelect.text();
-                        var gVal = gSelect.val();
-                        var gd = this.godowns[this.godownSelected];
+                    additem : function (event) {
+                        var godownSelect = $('#godown_id option:selected');
+                        var godownName = godownSelect.text().trim();
+                        var godownId = godownSelect.val();
+                        var goodSelect = $('#good_id option:selected');
+                        var goodName = goodSelect.text().trim();
+                        var goodId = goodSelect.val();
                         var obj = {
-                            id:  gVal ,
-                            name: gName ,
-                            qty : parseInt(this.remaining)
+                            godown_id:  godownId ,
+                            godown_name: godownName ,
+                            good_id:  goodId ,
+                            good_name: goodName ,
+                            qty : parseInt(this.quantity)
                         };
-                        Vue.set(this.allocation,obj.id,obj);
-                        //console.log(this.allocation);
+                        if(godownId == "" ){
+                            toastr['error']('Select a Godown');
+                            return;
+                        }
+                        if(goodId == ""){
+                            toastr['error']('Select an Item');
+                            return;
+                        }
+                        if(this.quantity < 1){
+                            toastr['error']('Quantity cannot be Zero');
+                            return;
+                        }
+                        
+                        this.allocation.push(obj);
+                        //Vue.set(this.allocation,this.allocation.length,obj);
+                        console.log(this.allocation,obj);
                     },
-                    removeGodown : function (event) {
-                        var btnObj = $(event.target);
-
-                        var id = btnObj.data('index');
-                        Vue.delete(this.allocation, id);
+                    removeitem : function (index,event) {
+                        this.allocation.splice(index,1);
+                        //Vue.delete(this.allocation, id);
                         //console.log(id);
                     }
                 }
             });
 
-            $('.mdb-select').material_select();
-            $("#quantitySharing").on('show.bs.modal', function () {
-                var Value = parseFloat($('#quantity').val());
-                if (!Quantity.total || Quantity.total !== Value) {
-                    Quantity.rem = Quantity.total = Value;
-                    app.quantity = Quantity.total;
-                }
-            });
-
-            $('.toggleswitch').bootstrapToggle();
-
-            //Init datepicker for date fields if data-datepicker attribute defined
-            //or if browser does not handle date inputs
-            $('.form-group input[type=date]').each(function (idx, elt) {
-                if (elt.type != 'date' || elt.hasAttribute('data-datepicker')) {
-                    elt.type = 'text';
-                    $(elt).datetimepicker($(elt).data('datepicker'));
-                }
-            });
-
-
-            $('.side-body input[data-slug-origin]').each(function (i, el) {
-                $(el).slugify();
-            });
-
-            $('.form-group').on('click', '.remove-multi-image', function (e) {
-                e.preventDefault();
-                $image = $(this).siblings('img');
-
-                params = {
-                    slug: 'purchases',
-                    image: $image.data('image'),
-                    id: $image.data('id'),
-                    field: $image.parent().data('field-name'),
-                    _token: '4LPphWph3cIC2iAEE3L3RaXhIubZAcGoWdt3FALz'
-                }
-
-                $('.confirm_delete_name').text($image.data('image'));
-                $('#confirm_delete_modal').modal('show');
-            });
-
-            $('#confirm_delete').on('click', function () {
-                $.post('http://localhost/Ignite-Constructions/public/admin/media/remove', params, function (response) {
-                    if (response
-                        && response.data
-                        && response.data.status
-                        && response.data.status === 200) {
-
-                        toastr.success(response.data.message);
-                        $image.parent().fadeOut(300, function () {
-                            $(this).remove();
-                        })
-                    } else {
-                        toastr.error("Error removing image.");
-                    }
-                });
-
-                $('#confirm_delete_modal').modal('hide');
-            });
-            $('[data-toggle="tooltip"]').tooltip();
         });
+
     </script>
 @stop

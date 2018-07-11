@@ -71,26 +71,27 @@ class PurchasesController extends VoyagerBaseController
 
     public function create(Request $request)
     {
-        $purchase=Purchase::all();
+        //$purchase=Purchase::all();
         $sellers=Seller::all();
         $goods=Good::all();
         $godowns=Godown::all();
 
-        return view('vendor.voyager.purchases.edit-add', compact('purchase','sellers','goods','godowns'));
+        return view('vendor.voyager.purchases.edit-add', compact('sellers','goods','godowns'));
     }
 
     public function store(Request $request)
     {
+        
         $rules = array(
             'seller_id'=>'required|numeric',
-            'goods_id'=>'required|numeric',
-            'quantity'       => 'required|numeric',
-            'cost'      => 'required|numeric',
             'date' => 'required|date',
             'purchase_due' => 'required|numeric',
-            'QS_godowns' => 'required'
+            'itemList' => 'required'
         );
         $data = request()->validate($rules);
+
+        $itemList = json_decode($data['itemList']);
+        dd($itemList);
 
         $purchase=new Purchase();
 
