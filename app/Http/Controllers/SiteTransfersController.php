@@ -35,12 +35,6 @@ class SiteTransfersController extends Controller
         return view('vendor.voyager.sitetransfers.read',compact('siteTransfer'));
     }
 
-
-    public function edit(Request $request, $id)
-    {
-        
-    }
-
     public function complete(Request $request,$id){
         $st = SiteTransfer::findOrFail($id);
         $st->completeTransfer();
@@ -53,6 +47,16 @@ class SiteTransfersController extends Controller
         return redirect()->back();
     }
 
+    public function edit(Request $request, $id)
+    {
+        $siteTransfer = SiteTransfer::findOrFail($id);
+        $godowns=Godown::all();
+        $sites=Site::all();
+        $goods=Good::all();
+        $labours=Labour::all();
+        return view('vendor.voyager.sitetransfers.edit',compact('siteTransfer','godowns','sites','goods','labours'));
+    }
+
 
     public function create(Request $request)
     {
@@ -61,33 +65,35 @@ class SiteTransfersController extends Controller
         $goods=Good::all();
         $labours=Labour::all();
 
-        return view('vendor.voyager.sitetransfers.edit-add' , compact('godowns','sites','goods','labours'));
+        return view('vendor.voyager.sitetransfers.add' , compact('godowns','sites','goods','labours'));
 
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
     public function store(Request $request)
     {
         $rules = array(
-            'good_id'=>'required|numeric',
-            'godown_id'=>'required|numeric',
-            'quantity'       => 'required|numeric',
-            'site_id'=>'required|numeric',
-            'labour_id'=>'required|numeric'
+            'transferList'=>'required',
         );
         $data = request()->validate($rules);
+        $data = json_decode($data['transferList']);
 
-        $good_id=$data['good_id'];
-        $godown_id=$data['godown_id'];
-        $site_id=$data['site_id'];
-        $labour_id=$data['labour_id'];
-        $quantity=$data['quantity'];
 
-        $good=Good::findOrFail($good_id);
-        $godown=Godown::findOrFail($godown_id);
-        $site=Site::findOrFail($site_id);
-        $labour=Labour::findOrFail($labour_id);
+        foreach ($data as $item)
+        {
+            //dd($item);
+            $good= Good::findOrFail($item->goods_id);
+            $godown=Godown::findOrFail($item->godown_id);
+            $site=Site::findOrFail($item->site_id);
+            $labour=Labour::findOrFail($item->labour_id);
+            $quantity = $item->quantity;
+            SiteTransfer::newTransfer($godown,$good,$site,$labour,$quantity);
 
-        $sitetransfer=SiteTransfer::newTransfer($godown,$good,$site,$labour,$quantity);
+        }
 
         return redirect()->route('voyager.site-transfers.index');
     }

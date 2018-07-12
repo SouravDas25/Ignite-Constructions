@@ -11,7 +11,7 @@
         <i class="icon-paper-plane"></i>
         Add Site Transfer
     </h1>
-    
+
 @stop
 
 @section('content')
@@ -22,11 +22,11 @@
                 <div class="panel panel-bordered">
                     <!-- form start -->
                     <form role="form"
-                            class="form-edit-add pr-3 pl-3"
-                            action="{{ route('voyager.site-transfers.store') }}"
-                            method="POST" >
+                          class="form-edit-add pr-3 pl-3"
+                          action="{{ route('voyager.site-transfers.store') }}"
+                          method="POST" >
                         <!-- PUT Method if we are editing -->
-                        
+
 
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
@@ -130,64 +130,9 @@
 
 @section('javascript')
     <script>
-        var params = {}
-        var $image
-
+        var params = {};
         $('document').ready(function () {
-            $('.toggleswitch').bootstrapToggle();
             $('.mdb-select').material_select();
-
-            //Init datepicker for date fields if data-datepicker attribute defined
-            //or if browser does not handle date inputs
-            /*$('.form-group input[type=date]').each(function (idx, elt) {
-                if (elt.type != 'date' || elt.hasAttribute('data-datepicker')) {
-                    elt.type = 'text';
-                    $(elt).datetimepicker($(elt).data('datepicker'));
-                }
-            });*/
-
-            $('.datepicker').pickadate({
-                format: 'yyyy/mm/dd',
-            });
-            
-
-            $('.side-body input[data-slug-origin]').each(function(i, el) {
-                $(el).slugify();
-            });
-
-            $('.form-group').on('click', '.remove-multi-image', function (e) {
-                e.preventDefault();
-                $image = $(this).siblings('img');
-
-                params = {
-                    slug:   'site-transfers',
-                    image:  $image.data('image'),
-                    id:     $image.data('id'),
-                    field:  $image.parent().data('field-name'),
-                    _token: '{{ csrf_token() }}'
-                }
-
-                $('.confirm_delete_name').text($image.data('image'));
-                $('#confirm_delete_modal').modal('show');
-            });
-
-            $('#confirm_delete').on('click', function(){
-                $.post('{{ route('voyager.media.remove') }}', params, function (response) {
-                    if ( response
-                        && response.data
-                        && response.data.status
-                        && response.data.status == 200 ) {
-
-                        toastr.success(response.data.message);
-                        $image.parent().fadeOut(300, function() { $(this).remove(); })
-                    } else {
-                        toastr.error("Error removing image.");
-                    }
-                });
-
-                $('#confirm_delete_modal').modal('hide');
-            });
-            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 @stop

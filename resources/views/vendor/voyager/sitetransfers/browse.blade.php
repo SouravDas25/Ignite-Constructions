@@ -87,10 +87,15 @@
                                     <td>{{ $transfer->status->details }}</td>
                                     <td>
                                         <div class="btn-group btn-group-sm">
-                                            <a href="" class="btn btn-mdb-color" data-toggle="modal" data-target="#changeStatus">Change Status</a>
+                                            <!--a href="" class="btn btn-mdb-color" data-toggle="modal" data-target="#changeStatus">
+                                            Change Status</a!-->
                                             <a class="btn btn-warning btn-sm pull-right"
                                             href="{{ route('voyager.site-transfers.show',['id'=>$transfer->id]) }}">
                                                 View Transfer
+                                            </a>
+                                            <a class="btn btn-primary btn-sm pull-right"
+                                               href="{{ route('voyager.site-transfers.edit',['id'=>$transfer->id]) }}">
+                                                Edit Transfer
                                             </a>
                                         </div>
                                     </td>

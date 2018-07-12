@@ -24,6 +24,10 @@ class IgniteTablesSeeder extends Seeder
 
     public function BasicSeeder($faker)
     {
+        $s = new \App\Unit();
+        $s->name = "Unit(s)";
+        $s->save();
+
         for($i = 0; $i < 10; $i++) {
             $s = new App\Seller();
             $s->name = $faker->name;
