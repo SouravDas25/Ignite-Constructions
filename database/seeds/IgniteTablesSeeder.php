@@ -17,11 +17,15 @@ class IgniteTablesSeeder extends Seeder
 
         $this->BasicSeeder($faker);
         $this->PurchaseSeeder($faker);
-        $this->TransferSeeder($faker);
+        //$this->TransferSeeder($faker);
     }
 
-    public function BasicSeeder(Faker\Factory $faker)
+    public function BasicSeeder($faker)
     {
+        $s = new \App\Unit();
+        $s->name = "Unit(s)";
+        $s->save();
+
         for($i = 0; $i < 10; $i++) {
             $s = new App\Seller();
             $s->name = $faker->name;
@@ -60,10 +64,6 @@ class IgniteTablesSeeder extends Seeder
             $s->password = bcrypt('password');
             $s->save();
         }
-
-        $s = new \App\Unit();
-        $s->name = "Unit(s)";
-        $s->save();
 
     }
 
