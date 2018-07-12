@@ -38,8 +38,6 @@
                           action="{{ (isset($purchase->id)) ? route('voyager.purchases.update', $purchase->id) : route('voyager.purchases.store') }}"
                           method="POST" enctype="multipart/form-data">
                         <!-- PUT Method if we are editing -->
-+
-                        .
                     @if(isset($purchase->id))
                         {{ method_field("PUT") }}
                     @endif

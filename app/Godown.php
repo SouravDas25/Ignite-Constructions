@@ -18,6 +18,23 @@ class Godown extends Model
         return $this->hasMany('App\GodownTransfer');
     }
 
+    public function goods()
+    {
+        return $this->hasMany('App\GodownTransfer')->groupBy('goods_id');
+    }
+
+    public function allGoods()
+    {
+        $allGoods = [];
+        foreach($this->goods as $godownTransfer)
+        {
+            $good= $godownTransfer->goods;
+            $good->quantity = $this->hasGoods($good);
+            array_push($allGoods,$good);
+        }
+        return $allGoods;
+    }
+
     public function hasGoods(Good $goods, $quantity = null)
     {
         $data = $this->godownTransfers->where('goods_id', $goods->id)->sum('quantity');
