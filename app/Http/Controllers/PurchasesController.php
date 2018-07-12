@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
 use TCG\Voyager\Http\Controllers\VoyagerBaseController;
@@ -31,9 +32,9 @@ class PurchasesController extends VoyagerBaseController
     public function edit(Request $request , $id)
     {
         $purchase=Purchase::findOrFail($id);
-        $sellers=Seller::all();
-        $goods=Good::all();
-        $godowns=Godown::all();
+        $sellers= Seller::all();
+        $goods = Good::all();
+        $godowns = Godown::all();
         
         return view('vendor.voyager.purchases.edit-add', compact('purchase','sellers','goods','godowns'));
     }
@@ -42,31 +43,28 @@ class PurchasesController extends VoyagerBaseController
     {
         $rules = array(
             'seller_id'=>'required|numeric',
-            'goods_id'=>'required|numeric',
-            'quantity'       => 'required|numeric',
-            'cost'      => 'required|numeric',
             'date' => 'required|date',
-            'purchase_due' => 'required|numeric'
+            'purchase_due' => 'required|numeric',
+            'itemList' => 'required'
         );
-        $validator = Validator::make(request()->all(), $rules);
+        $data = request()->validate($rules);
+        $itemList = json_decode($data['itemList']);
+        $seller = Seller::findOrFail($data['seller_id']);
+        $purchase = Purchase::updatePurchase($id);
 
-        $purchase=Purchase::findOrFail($id);
+        $purchase->seller($seller)
+            ->due($data['purchase_due'])
+            ->date(Carbon::parse($data['date']));
 
-        if ($validator->fails()) {
-            return redirect()->route('voyager.purchases.show',$purchase->id)->withErrors($validator)->withInput();
-        } else{
-            
-            $purchase->seller_id=request('seller_id');
-            $purchase->goods_id=request('goods_id');
-            $purchase->quantity=request('quantity');
-            $purchase->cost=request('cost');
-            $purchase->date=request('date');
-            $purchase->purchase_due=request('purchase_due');
-
-            $purchase->save();
-            
-            return redirect()->route('voyager.purchases.show',$purchase->id);
+        foreach($itemList as $item) {
+            $godown = Godown::findOrFail($item->godown_id);
+            $good = Good::findOrFail($item->good_id);
+            $purchase->addItem($godown, $good, $item->qty, $item->cost);
         }
+
+        $purchase->save();
+
+        return redirect()->route('voyager.purchases.index');
     }
 
     public function create(Request $request)
@@ -91,38 +89,43 @@ class PurchasesController extends VoyagerBaseController
         $data = request()->validate($rules);
 
         $itemList = json_decode($data['itemList']);
-        dd($itemList);
+        //dd($itemList);
 
-        $purchase=new Purchase();
+        $seller = Seller::findOrFail($data['seller_id']);
 
-        $purchase->seller_id= $data['seller_id'];
-        $purchase->goods_id= $data['goods_id'];
-        $purchase->quantity= $data['quantity'];
-        $purchase->cost=$data['cost'];
-        $purchase->date=$data['date'];
-        $purchase->purchase_due=$data['purchase_due'];
+        $purchase = Purchase::newPurchase();
+        $purchase->seller($seller)
+            ->due($data['purchase_due'])
+            ->date(Carbon::parse($data['date']));
+
+        foreach($itemList as $item) {
+            $godown = Godown::findOrFail($item->godown_id);
+            $good = Good::findOrFail($item->good_id);
+            $purchase->addItem($godown, $good, $item->qty, $item->cost);
+        }
 
         $purchase->save();
 
-        $godowns = json_decode($data['QS_godowns']);
-
-        foreach($godowns as $godown) {
-            $godown_id = $godown->id;
-            $qty = $godown->qty;
-            
-            $godown_transfer=new GodownTransfer();
-
-            $godown_transfer->godown_id= $godown_id;
-            $godown_transfer->purchase_id= $purchase->id;
-            $godown_transfer->quantity=$qty;
-            $godown_transfer->date= $purchase->date;
-
-            $godown_transfer->save();
-        }
-        
         return redirect()->route('voyager.purchases.index');
         
     }
 
-    
+    public function destroy(Request $request, $id)
+    {
+        try {
+            Purchase::deletePurchase($id);
+            $data = [
+                'message' => 'Successfully deleted a Purchase',
+                'alert-type' => 'success',
+            ];
+        } catch (\Exception $e) {
+            $data = [
+                'message' => $e->getMessage(),
+                'alert-type' => 'error',
+            ];
+        }
+        return redirect()->route('voyager.purchases.index')->with($data);
+    }
+
+
 }
