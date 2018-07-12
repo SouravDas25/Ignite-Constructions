@@ -64,7 +64,7 @@ class PurchaseBuilder
         $this->id = $id;
         $this->puchase = $id != null ? Purchase::findOrFail($id) :new Purchase();
         $this->items = [];
-        foreach ($this->puchase->godownTransfers as $gt){
+        /*foreach ($this->puchase->godownTransfers as $gt){
             $item = new \stdClass();
             $item->id = $gt->id;
             $item->godown = $gt->godown;
@@ -72,7 +72,7 @@ class PurchaseBuilder
             $item->quantity = $gt->quantity;
             $item->cost = $gt->cost;
             array_push($this->items,$item);
-        }
+        }*/
     }
 
     public function seller(Seller $seller)
@@ -104,7 +104,7 @@ class PurchaseBuilder
         return $this;
     }
 
-    public function delIndex(int $index)
+    /*public function delIndex(int $index)
     {
         if($index)unset($this->items[$index]);
         return $this;
@@ -123,7 +123,7 @@ class PurchaseBuilder
             $i++;
         }
         return $this->delIndex($index);
-    }
+    }*/
 
     /**
      * @throws \Exception

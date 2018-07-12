@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Status extends Model
 {
-    public static $items = [
+    public const items = [
         'PENDING',
         'CONFIRMED',
         'COMPLETED',
@@ -14,7 +14,7 @@ class Status extends Model
 
     public static function seedStatus()
     {
-        foreach(Status::$items as $item){
+        foreach(Status::items as $item){
             $s = new Status();
             $s->details = $item;
             $s->save();
@@ -24,7 +24,7 @@ class Status extends Model
     public static function statusID($status)
     {
         $k = Status::all();
-        if($k->count() != count(Status::$items) ){
+        if($k->count() != count(Status::items) ){
             //Status::truncate();
             Status::seedStatus();
             $k = Status::all();

@@ -32,17 +32,22 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
+                                        <th>Godown</th>
                                         <th>Goods Item</th>
                                         <th>Quantity</th>
-                                        <th>Godown</th>
+                                        <th>Cost / unit </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($purchase->godownTransfers as $godownTransfer)
                                         <tr>
-                                            <td>{{ $godownTransfer->goods->name }}</td>
-                                            <td>{{ $godownTransfer->quantity }}</td>
                                             <td>{{ $godownTransfer->Godown->name }}</td>
+                                            <td>{{ $godownTransfer->goods->name }}</td>
+                                            <td>
+                                                {{ $godownTransfer->quantity }}
+                                                <small>{{ $godownTransfer->goods->unit->name  }}</small>
+                                            </td>
+                                            <td>{{ $godownTransfer->cost }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

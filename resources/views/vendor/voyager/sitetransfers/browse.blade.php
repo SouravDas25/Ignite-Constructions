@@ -48,12 +48,6 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ $status_id == \App\Status::ACTIVE()->id ? 'active' : '' }}"
-                   href="{{ route('voyager.site-transfers.index',['status'=> \App\Status::ACTIVE()->id ]) }}">
-                    Active
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link {{ $status_id == \App\Status::COMPLETED()->id ? 'active' : '' }}"
                    href="{{ route('voyager.site-transfers.index',['status'=> \App\Status::COMPLETED()->id ]) }}">
                     Completed
@@ -83,7 +77,10 @@
                             @foreach($siteTransfers as $transfer)
                                 <tr>
                                     <td>{{ $transfer->goods()->name }}</td>
-                                    <td>{{ $transfer->transferQuantity() }}</td>
+                                    <td>
+                                        {{ $transfer->transferQuantity() }}
+                                        <small>{{ $transfer->goods()->unit->name }}</small>
+                                    </td>
                                     <td>{{ $transfer->godown()->name}}</td>
                                     <td>{{ $transfer->site->name }}</td>
                                     <td>{{ $transfer->labour->name }}</td>
