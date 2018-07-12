@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
+
+
 class IgniteTablesSeeder extends Seeder
 {
     /**
@@ -17,10 +19,10 @@ class IgniteTablesSeeder extends Seeder
 
         $this->BasicSeeder($faker);
         $this->PurchaseSeeder($faker);
-        $this->TransferSeeder($faker);
+        //$this->TransferSeeder($faker);
     }
 
-    public function BasicSeeder(Faker\Factory $faker)
+    public function BasicSeeder($faker)
     {
         for($i = 0; $i < 10; $i++) {
             $s = new App\Seller();
@@ -60,10 +62,6 @@ class IgniteTablesSeeder extends Seeder
             $s->password = bcrypt('password');
             $s->save();
         }
-
-        $s = new \App\Unit();
-        $s->name = "Unit(s)";
-        $s->save();
 
     }
 
