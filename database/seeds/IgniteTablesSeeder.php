@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
+
+
 class IgniteTablesSeeder extends Seeder
 {
     /**
