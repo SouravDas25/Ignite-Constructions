@@ -8,7 +8,10 @@
     <a href="{{route('voyager.godowns.edit',$godown->id)}}" class="btn btn-info hoverable"><i class="icon-pencil-4 pr-2"></i>Edit</a>
     <a class="btn btn-danger hoverable" data-toggle="modal" data-target="#delete_Modal"><i class="icon-trash-empty pr-2"></i>Delete</a>
     <a href="{{route('voyager.godowns.index')}}" class="btn btn-yellow hoverable"><i class="icon-th-list pr-2"></i>Return to list</a>
- 
+    <a href="{{ route('voyager.purchases.create') }}" class="btn btn-success ">
+        <i class="icon voyager-basket pr-2"></i>
+        Purchase Item
+    </a>
     @include('voyager::multilingual.language-selector')
 @stop
 

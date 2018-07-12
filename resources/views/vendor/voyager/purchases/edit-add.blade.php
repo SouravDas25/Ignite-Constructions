@@ -109,7 +109,7 @@
                                         <div class="col-md-3 form-group">
                                             <label>Good</label>
                                             <select class="browser-default select2-after-vue-select" id="good_id"
-                                                    name="good_id">
+                                                    name="good_id"  onchange="replaceUnit()">
                                                 <option value="" disabled selected>Choose an option</option>
                                                 <option v-for="items in goods" v-bind:data-unit="items.unit"
                                                         v-bind:value="items.val">
@@ -119,11 +119,16 @@
                                         </div>
                                         <div class="col-md-2 form-group">
                                             <label for="quantity">Quantity</label>
-                                            <input type="number" id="quantity" v-model.number="quantity"
-                                                   name="quantity" class="form-control">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <input type="number" id="quantity" v-model.number="quantity"
+                                                       name="quantity" class="form-control p-2">
+                                                <div class="input-group-append bg-info">
+                                                    <span class="input-group-text" >@{{ unit }}</span>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-md-2 form-group">
-                                            <label for="quantity">Cost / unit</label>
+                                            <label for="quantity">Cost / @{{ unit }}</label>
                                             <input type="number" id="cost" v-model.number="cost"
                                                    name="cost" class="form-control">
                                         </div>
@@ -197,6 +202,7 @@
         var $image;
 
         var ModelGodowns = [
+            @if(isset($purchase))
             @foreach($purchase->godownTransfers as $transfer)
             {
                 godown_id: '{{ $transfer->godown->id }}',
@@ -208,6 +214,7 @@
                 cost: parseFloat('{{ $transfer->cost }}'),
             },
             @endforeach
+            @endif
         ];
 
         function submitForm() {
@@ -216,17 +223,23 @@
             $('#VueApp').submit();
         }
 
+        function replaceUnit() {
+            var goodSelect = $('#good_id option:selected');
+            app.unit = goodSelect.data('unit');
+        }
 
+        var app;
         $('document').ready(function () {
 
             //$('.select2').mdb_select();
 
 
-            var app = new Vue({
+            app = new Vue({
                 el: '#VueApp',
                 data: {
                     quantity: 0,
                     cost: 0,
+                    unit : "unit",
                     godowns: [
                         @foreach($godowns as $godown)
                         {
@@ -242,18 +255,6 @@
                         @endforeach
                     ],
                     allocation: ModelGodowns,
-                },
-                computed: {
-                    remaining: function () {
-                        var sum = 0;
-                        for (var key in this.allocation) {
-                            if (this.allocation.hasOwnProperty(key)) {
-                                //console.log(key + " -> " + p[key]);
-                                sum += this.allocation[key].qty;
-                            }
-                        }
-                        return parseInt(this.quantity) - parseInt(sum);
-                    }
                 },
                 methods: {
                     additem: function (event) {
