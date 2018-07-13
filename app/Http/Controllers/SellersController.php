@@ -25,6 +25,11 @@ class SellersController extends VoyagerBaseController
 
         $colorArray=['red','pink','purple','deep-purple','indigo','blue','light-blue','cyan','teal','green','light-green','lime','amber','orange','deep-orange','brown','grey','blue-grey'];
 
+        $badges = $seller->broughtGoods();
+
+        //dd($badges);
+
+
         return view('vendor.voyager.sellers.read', compact('seller','colorArray'));
     }
 
