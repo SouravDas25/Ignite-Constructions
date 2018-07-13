@@ -44,7 +44,7 @@
                                         @foreach($allGoods as $Good)
                                             <tr>
                                                 <td>{{ $Good->name }}</td>
-                                                <td>{{ $Good->quantity }}</td>
+                                                <td>{{ $Good->quantity }} <small>{{ $Good->unit }}</small></td>
                                             </tr>
                                         @endforeach
                                     @endif

@@ -39,7 +39,7 @@
                                             @foreach($godownTransfer->siteGodownTransfers as $siteGodownTransfer)
                                                 <tr>
                                                     <td>{{ $godownTransfer->goods->name }}</td>
-                                                    <td>{{ $siteGodownTransfer->quantity }}</td>
+                                                    <td>{{ $siteGodownTransfer->quantity }} <small>{{ $godownTransfer->goods->unit->name }}</small></td>
                                                     <td>{{ $siteGodownTransfer->siteTransfer->date }}</td>
                                                     <td>{{ $siteGodownTransfer->siteTransfer->site->name }}</td>
                                                     <td>{{ $siteGodownTransfer->siteTransfer->site->address }}</td>

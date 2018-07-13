@@ -43,7 +43,8 @@ class GodownsController extends VoyagerBaseController
         {
             $good=$godownTransfer->goods;
             $item = new \stdClass();
-            $item->name = $good->name;	
+            $item->name = $good->name;
+            $item->unit = $good->unit->name;	
             $item->quantity =$godown->hasGoods($good);	
             array_push($allGoods,$item);
         }

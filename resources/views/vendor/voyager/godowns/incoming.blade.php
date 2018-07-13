@@ -38,7 +38,7 @@
                                         @foreach($godown->godownTransfers as $godownTransfer)
                                             <tr>
                                                 <td>{{ $godownTransfer->goods->name }}</td>
-                                                <td>{{ $godownTransfer->quantity }}</td>
+                                                <td>{{ $godownTransfer->quantity }} <small>{{ $godownTransfer->goods->unit->name }}</small> </td>
                                                 <td>{{ $godownTransfer->purchase->date }}</td>
                                                 <td>{{ $godownTransfer->purchase->seller->name }}</td>
                                                 {{-- <td><a class="btn btn-sm btn-danger hoverable waves-effect waves-light" data-toggle="modal" data-target="#delete_Modal"><i class="icon-trash-empty pr-2"></i> Delete</a></td> --}}

@@ -23,11 +23,9 @@ class SellersController extends VoyagerBaseController
     {
         $seller=Seller::findOrFail($id);
 
-        $badges = Purchase::where('seller_id','=', $id)->groupBy('goods_id')->get();
+        $colorArray=['red','pink','purple','deep-purple','indigo','blue','light-blue','cyan','teal','green','light-green','lime','amber','orange','deep-orange','brown','grey','blue-grey'];
 
-        $colorArray=['red','pink','purple','deep-purple','indigo','blue','light-blue','cyan','teal','green','light-green','lime','yellow','amber','orange','deep-orange','brown','grey','blue-grey'];
-
-        return view('vendor.voyager.sellers.read', compact('seller','badges','colorArray'));
+        return view('vendor.voyager.sellers.read', compact('seller','colorArray'));
     }
 
     public function destroy(Request $request, $id)

@@ -8,7 +8,7 @@
 
 @section('page_header')
     <h1 class="page-title">
-        <i class="icon-paper-plane"></i>
+        <i class="icon-switch"></i>
         Add Site Transfer
     </h1>
     <style>
@@ -172,11 +172,11 @@
 
                         </div><!-- panel-body -->
 
-                        <div class="card-footer">
-                            <div class="col-md-12">
+                        <div class="card-footer grey">
+                            <div class="col-md-12 pt-3">
                                 <div class="form-group">
                                     <button type="button" onclick="submitForm()"
-                                            class="btn btn-primary btn-lg mx-0 save">
+                                            class="btn btn-primary btn-block btn-lg mx-0 save">
                                         {{ __('voyager::generic.save') }}
                                     </button>
                                 </div>

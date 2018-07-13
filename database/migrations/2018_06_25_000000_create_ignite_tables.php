@@ -31,10 +31,10 @@ class CreateIgniteTables extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('details');
-            $table->integer('unit_id')->unsigned()->index('fk_goods_unit');
+            $table->integer('unit_id')->unsigned()->index('fk_goods_unit')->default('1');
             $table->timestamps();
             $table->foreign('unit_id', 'fk_goods_unit')
-                ->references('id')->on('unit')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+                ->references('id')->on('units')->onUpdate('RESTRICT')->onDelete('RESTRICT');
         });
 
         Schema::create('godowns', function (Blueprint $table) {
