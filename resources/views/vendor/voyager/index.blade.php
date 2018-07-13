@@ -5,16 +5,150 @@
         @include('voyager::alerts')
         @include('voyager::dimmers')
         <div class="analytics-container">
-            <?php $google_analytics_client_id = Voyager::setting("admin.google_analytics_client_id"); ?>
-            @if (isset($google_analytics_client_id) && !empty($google_analytics_client_id))
-                {{-- Google Analytics Embed --}}
-                <div id="embed-api-auth-container"></div>
-            @else
-                <p style="border-radius:4px; padding:20px; background:#fff; margin:0; color:#999; text-align:center;">
-                    {!! __('voyager::analytics.no_client_id') !!}
-                    <a href="https://console.developers.google.com" target="_blank">https://console.developers.google.com</a>
-                </p>
-            @endif
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 text-center pt-4">
+                        <h3><b>Welcome User</b></h3>
+                        <h5 class="pt-3"><small>Wish you a good day ahead</small></h5>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <hr>
+                    </div>
+        
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Your Goods Chart</h4>
+        
+                                <canvas id="barChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header amber white-text">
+                                <h5><i class="voyager-basket pr-2"></i> <b>Your last 5 Purchases</b></h5>
+                            </div>
+                            <div class="card-body" style="overflow-y: scroll;height: 300px">
+                                <div class="card">
+                                    <div class="card-header blue-grey white-text">
+                                        <h5><i class="icon-location-5 red-text"></i> ABC Godown</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Good : abc</h6>
+                                        <h6>Seller : xyz</h6>
+                                        <div class="float-right">
+                                            <a href="" class="btn btn-secondary">View Purchase <i class="icon-eye"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="card pt-3">
+                                    <div class="card-header blue-grey white-text">
+                                        <h5><i class="icon-location-5 red-text"></i> ABC Godown</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Good : abc</h6>
+                                        <h6>Seller : xyz</h6>
+                                        <div class="float-right">
+                                            <a href="" class="btn btn-secondary">View Purchase <i class="icon-eye"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="card pt-3">
+                                    <div class="card-header blue-grey white-text">
+                                        <h5><i class="icon-location-5 red-text"></i> ABC Godown</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Good : abc</h6>
+                                        <h6>Seller : xyz</h6>
+                                        <div class="float-right">
+                                            <a href="" class="btn btn-secondary">View Purchase <i class="icon-eye"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="card pt-3">
+                                    <div class="card-header blue-grey white-text">
+                                        <h5><i class="icon-location-5 red-text"></i> ABC Godown</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Good : abc</h6>
+                                        <h6>Seller : xyz</h6>
+                                        <div class="float-right">
+                                            <a href="" class="btn btn-secondary">View Purchase <i class="icon-eye"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="card pt-3">
+                                    <div class="card-header blue-grey white-text">
+                                        <h5><i class="icon-location-5 red-text"></i> ABC Godown</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Good : abc</h6>
+                                        <h6>Seller : xyz</h6>
+                                        <div class="float-right">
+                                            <a href="" class="btn btn-secondary">View Purchase <i class="icon-eye"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header blue-grey white-text">
+                                <i class="icon-rupee"></i> Your Cost Chart
+                            </div>
+                            <div class="card-body">
+                                <canvas id="lineChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header blue white-text">
+                                <h4><b>Active Site Transfers</b></h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="card">
+                                    <div class="card-header blue-grey white-text">
+                                        <h5><i class="icon-location-5 blue-text"></i> From ABC Godown to <i class="icon-location-5 red-text"></i> XYZ Site</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Good : abc</h6> 
+                                        <h6>Labour :xyz</h6>
+                                    </div>
+                                    <div class="card-footer white">
+                                        <a href="" class="btn btn-secondary">Spectate Transfer <i class="icon-eye"></i></a>
+                                    </div>
+                                </div>
+        
+                                <div class="card pt-3">
+                                    <div class="card-header blue-grey white-text">
+                                        <h5><i class="icon-location-5 blue-text"></i> From ABC Godown to <i class="icon-location-5 red-text"></i> XYZ Site</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Good : abc</h6> 
+                                        <h6>Labour :xyz</h6>
+                                    </div>
+                                    <div class="card-footer white">
+                                        <a href="" class="btn btn-secondary">Spectate Transfer <i class="icon-eye"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
 
             <div class="Dashboard Dashboard--full" id="analytics-dashboard">
                 <header class="Dashboard-header">
@@ -116,6 +250,79 @@
             // This code uses ES6 promises. If you want to use this code in a browser
             // that doesn't supporting promises natively, you'll have to include a polyfill.
 
+            $('document').ready(function () {
+
+                var ctxB = document.getElementById("barChart").getContext('2d');
+                var myBarChart = new Chart(ctxB, {
+                    type: 'bar',
+                    data: {
+                        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                        datasets: [{
+                            label: '# of Votes',
+                            data: [12, 19, 3, 5, 2, 3],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }]
+                        }
+                    }
+                });
+
+                var ctxL = document.getElementById("lineChart").getContext('2d');
+                var myLineChart = new Chart(ctxL, {
+                    type: 'line',
+                    data: {
+                        labels: ["January", "February", "March", "April", "May", "June", "July"],
+                        datasets: [
+                            {
+                                label: "My First dataset",
+                                fillColor: "rgba(220,220,220,0.2)",
+                                strokeColor: "rgba(220,220,220,1)",
+                                pointColor: "rgba(220,220,220,1)",
+                                pointStrokeColor: "#fff",
+                                pointHighlightFill: "#fff",
+                                pointHighlightStroke: "rgba(220,220,220,1)",
+                                data: [65, 59, 80, 81, 56, 55, 40]
+                            },
+                            {
+                                label: "My Second dataset",
+                                fillColor: "rgba(151,187,205,0.2)",
+                                strokeColor: "rgba(151,187,205,1)",
+                                pointColor: "rgba(151,187,205,1)",
+                                pointStrokeColor: "#fff",
+                                pointHighlightFill: "#fff",
+                                pointHighlightStroke: "rgba(151,187,205,1)",
+                                data: [28, 48, 40, 19, 86, 27, 90]
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            });
             gapi.analytics.ready(function () {
 
                 /**
