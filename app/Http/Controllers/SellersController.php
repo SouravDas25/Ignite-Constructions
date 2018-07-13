@@ -33,7 +33,7 @@ class SellersController extends VoyagerBaseController
         //dd($badges);
 
 
-        return view('vendor.voyager.sellers.read', compact('seller','colorArray'));
+        return view('vendor.voyager.sellers.read', compact('seller','colorArray','badges'));
     }
 
     public function destroy(Request $request, $id)
