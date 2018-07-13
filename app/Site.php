@@ -41,6 +41,7 @@ class Site extends Model
      * @param Coordinates $location
      * @return $this
      */
+
     public function updateLocation(Coordinates $location)
     {
         $this->location = $location->toGeometry();

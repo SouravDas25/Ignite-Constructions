@@ -24,12 +24,14 @@
         <div class="row">
             <div class="col-sm-12 col-md-6 col-lg-5">
                 <h3 class="pl-3"><b>{{$seller->name}}</b></h3>
+
                 <div class="pl-3">
                     @foreach($badges as $badge)
                         <?php $color=rand(0,18);?>
                         <span class="badge badge-pill {{$colorArray[$color]}}">{{ $badge->name }}</span>
                     @endforeach
                 </div>
+
             </div>
             <div class="col-lg-1"></div>
             <div class="col-sm-12 col-md-6 col-lg-6" style="background-color:white; border-radius:5px;">
@@ -58,13 +60,15 @@
                                 <tbody>
                                     @if(count($seller->purchases) > 0)
                                         @foreach($seller->purchases as $purchase)
-                                            <tr>
-                                                <td>{{ "" }}</td>
-                                                <td>{{ "" }}</td>
-                                                <td>{{ "" }}</td>
-                                                <td>{{ $purchase->date }}</td>
-                                                <td>{{ $purchase->purchase_due }}</td>
-                                            </tr>
+                                            @foreach($purchase->godownTransfers as $transfer)
+                                                <tr>
+                                                    <td>{{ $transfer->goods->name }}</td>
+                                                    <td>{{ $transfer->quantity }} <small>{{ $transfer->goods->unit->name }}</small></td>
+                                                    <td>{{ $transfer->cost }}</td>
+                                                    <td>{{ $purchase->date }}</td>
+                                                    <td>{{ $purchase->purchase_due }}</td>
+                                                </tr>
+                                            @endforeach
                                         @endforeach
                                     @endif
                                 </tbody>

@@ -95,10 +95,7 @@ function addTransfer()
     return $st;
 }
 
-
-$purchase = \App\Purchase::find(6);
-$p = \App\Purchase::updatePurchase(6);
-
-echo $purchase;
-
+$labour = \App\Labour::find(10);
+$loc = $labour->getLatLng();
+$st = \App\SiteTransfer::find(1);
 //$st->updateGoods($godown,$goods,10);

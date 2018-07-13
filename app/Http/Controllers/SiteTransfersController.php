@@ -9,6 +9,7 @@ use App\Site;
 use App\Labour;
 use App\Good;
 use App\SiteTransfer;
+use Carbon\Carbon;
 
 class SiteTransfersController extends Controller
 {
@@ -47,6 +48,54 @@ class SiteTransfersController extends Controller
         return redirect()->back();
     }
 
+    public function edit(Request $request, $id)
+    {
+        $siteTransfer = SiteTransfer::findOrFail($id);
+        $godowns=Godown::all();
+        $sites=Site::all();
+        $goods=Good::all();
+        $labours=Labour::all();
+        return view('vendor.voyager.sitetransfers.edit',compact('siteTransfer','godowns','sites','goods','labours'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $rules = array(
+            'godown_id'=>'required|numeric',
+            'good_id' => 'required|numeric',
+            'site_id' => 'required|numeric',
+            'labour_id' => 'required|numeric',
+            'quantity' => 'required|numeric',
+            'date' => 'required|date'
+        );
+
+        $data = request()->validate($rules);
+
+        $siteTransfer = SiteTransfer::findOrFail($id);
+
+        $godown=$siteTransfer->godown();
+        $good=$siteTransfer->goods();
+        $transferQuantity=$siteTransfer->transferQuantity();
+
+        $requestGodown=Godown::find($data['godown_id']);
+        $requestGood=Good::find($data['good_id']);
+        $requestSite=Site::find($data['site_id']);
+        $requestLabour=Labour::find($data['labour_id']);
+        $requestDate=Carbon::parse($data['date']);
+
+        if($godown->id != $data['godown_id'] || $good->id != $data['good_id'] || $transferQuantity != $data['quantity'])
+        {
+            $siteTransfer->updateGoods($requestGodown,$requestGood,$data['quantity']);
+        }
+
+        if($siteTransfer->site->id != $data['site_id'] || $siteTransfer->labour->id != $data['labour_id'] || $siteTransfer->date != $data['date'])
+        {
+            $siteTransfer->updateTransfer($requestSite,$requestLabour,$requestDate);
+        }
+
+        return redirect()->route('voyager.site-transfers.index');
+    }
+
     public function create(Request $request)
     {
         $godowns=Godown::all();
@@ -54,33 +103,35 @@ class SiteTransfersController extends Controller
         $goods=Good::all();
         $labours=Labour::all();
 
-        return view('vendor.voyager.sitetransfers.edit-add' , compact('godowns','sites','goods','labours'));
+        return view('vendor.voyager.sitetransfers.add' , compact('godowns','sites','goods','labours'));
 
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
     public function store(Request $request)
     {
         $rules = array(
-            'good_id'=>'required|numeric',
-            'godown_id'=>'required|numeric',
-            'quantity'       => 'required|numeric',
-            'site_id'=>'required|numeric',
-            'labour_id'=>'required|numeric'
+            'transferList'=>'required',
         );
         $data = request()->validate($rules);
+        $data = json_decode($data['transferList']);
 
-        $good_id=$data['good_id'];
-        $godown_id=$data['godown_id'];
-        $site_id=$data['site_id'];
-        $labour_id=$data['labour_id'];
-        $quantity=$data['quantity'];
 
-        $good=Good::findOrFail($good_id);
-        $godown=Godown::findOrFail($godown_id);
-        $site=Site::findOrFail($site_id);
-        $labour=Labour::findOrFail($labour_id);
+        foreach ($data as $item)
+        {
+            //dd($item);
+            $good= Good::findOrFail($item->goods_id);
+            $godown=Godown::findOrFail($item->godown_id);
+            $site=Site::findOrFail($item->site_id);
+            $labour=Labour::findOrFail($item->labour_id);
+            $quantity = $item->quantity;
+            SiteTransfer::newTransfer($godown,$good,$site,$labour,$quantity);
 
-        $sitetransfer=SiteTransfer::newTransfer($godown,$good,$site,$labour,$quantity);
+        }
 
         return redirect()->route('voyager.site-transfers.index');
     }

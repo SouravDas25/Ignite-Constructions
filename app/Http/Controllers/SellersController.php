@@ -26,10 +26,14 @@ class SellersController extends VoyagerBaseController
         $badges = $seller->broughtGoods();
 
         //dd($badges);
+        $colorArray=['red','pink','purple','deep-purple','indigo','blue','light-blue','cyan','teal','green','light-green','lime','amber','orange','deep-orange','brown','grey','blue-grey'];
 
-        $colorArray=['red','pink','purple','deep-purple','indigo','blue','light-blue','cyan','teal','green','light-green','lime','yellow','amber','orange','deep-orange','brown','grey','blue-grey'];
+        $badges = $seller->broughtGoods();
 
-        return view('vendor.voyager.sellers.read', compact('seller','badges','colorArray'));
+        //dd($badges);
+
+
+        return view('vendor.voyager.sellers.read', compact('seller','colorArray'));
     }
 
     public function destroy(Request $request, $id)
