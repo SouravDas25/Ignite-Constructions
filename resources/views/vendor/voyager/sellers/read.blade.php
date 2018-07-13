@@ -27,7 +27,7 @@
                 <div class="pl-3">
                     @foreach($badges as $badge)
                         <?php $color=rand(0,18);?>
-                        <span class="badge badge-pill {{$colorArray[$color]}}">{{ $badge->goods->name }}</span>
+                        <span class="badge badge-pill {{$colorArray[$color]}}">{{ $badge->name }}</span>
                     @endforeach
                 </div>
             </div>
@@ -56,12 +56,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if(count($seller->purchases)>0)
+                                    @if(count($seller->purchases) > 0)
                                         @foreach($seller->purchases as $purchase)
                                             <tr>
-                                                <td>{{ $purchase->goods->name }}</td>
-                                                <td>{{ $purchase->quantity }}</td>
-                                                <td>{{ $purchase->cost }}</td>
+                                                <td>{{ "" }}</td>
+                                                <td>{{ "" }}</td>
+                                                <td>{{ "" }}</td>
                                                 <td>{{ $purchase->date }}</td>
                                                 <td>{{ $purchase->purchase_due }}</td>
                                             </tr>

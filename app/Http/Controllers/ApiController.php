@@ -15,6 +15,18 @@ class ApiController extends Controller
     {
         $userName = $request->input('email',null);
         $password = $request->input('password',null);
+        $labourID = $request->input('id',null);
+
+        if($labourID != null){
+            $labour = Labour::find($labourID);
+            if($labour && $userName && $labour->name == $userName ){
+                return response()->json(['status'=>'SUCCESS','data'=> [
+                    'id' => $labour->id,
+                    'userName' => $labour->name
+                ]]);
+            }
+            return response()->json(['status'=>'ERROR','data'=>'Labour Id incorrect.']);
+        }
         if(!$userName || !$password){
             return response()->json(['status'=>'ERROR','data'=>'UserName and Password is Required']);
         }
