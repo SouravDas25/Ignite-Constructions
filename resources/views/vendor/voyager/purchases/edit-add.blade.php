@@ -109,7 +109,7 @@
                                         <div class="col-md-3 form-group">
                                             <label>Good</label>
                                             <select class="browser-default select2-after-vue-select" id="good_id"
-                                                    name="good_id"  onchange="replaceUnit()">
+                                                    name="good_id" onchange="replaceUnit()">
                                                 <option value="" disabled selected>Choose an option</option>
                                                 <option v-for="items in goods" v-bind:data-unit="items.unit"
                                                         v-bind:value="items.val">
@@ -123,7 +123,7 @@
                                                 <input type="number" id="quantity" v-model.number="quantity"
                                                        name="quantity" class="form-control p-2">
                                                 <div class="input-group-append bg-info">
-                                                    <span class="input-group-text" >@{{ unit }}</span>
+                                                    <span class="input-group-text">@{{ unit }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -202,8 +202,8 @@
         var $image;
 
         var ModelGodowns = [
-            @if(isset($purchase))
-            @foreach($purchase->godownTransfers as $transfer)
+                @if(isset($purchase))
+                @foreach($purchase->godownTransfers as $transfer)
             {
                 godown_id: '{{ $transfer->godown->id }}',
                 godown_name: '{{ $transfer->godown->name }}',
@@ -239,16 +239,16 @@
                 data: {
                     quantity: 0,
                     cost: 0,
-                    unit : "unit",
+                    unit: "unit",
                     godowns: [
-                        @foreach($godowns as $godown)
+                            @foreach($godowns as $godown)
                         {
                             val: '{{ $godown->id }}', text: '{{ $godown->name }}'
                         },
                         @endforeach
                     ],
                     goods: [
-                        @foreach($goods as $good)
+                            @foreach($goods as $good)
                         {
                             val: '{{ $good->id }}', text: '{{ $good->name }}', unit: '{{ $good->unit->name }}'
                         },

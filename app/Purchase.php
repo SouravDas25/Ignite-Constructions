@@ -7,22 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Purchase extends Model
 {
-	protected $fillable=['seller_id','cost','date','purchase_due'];
-
-	public function seller()
-	{
-		return $this->belongsTo('App\Seller','seller_id');
-	}
-
-	public function godownTransfers()
-    {
-        return $this->hasMany('App\GodownTransfer');
-    }
-
-	public function quantity()
-    {
-        return $this->godownTransfer->quantity;
-    }
+    protected $fillable = ['seller_id', 'cost', 'date', 'purchase_due'];
 
     public static function newPurchase()
     {
@@ -42,7 +27,7 @@ class Purchase extends Model
     public static function deletePurchase($id)
     {
         Purchase::findOrFail($id);
-        Utility::runSqlSafely(function () use($id) {
+        Utility::runSqlSafely(function () use ($id) {
             Purchase::deleteGodownTransfers($id);
             Purchase::destroy($id);
         });
@@ -50,19 +35,39 @@ class Purchase extends Model
 
     public static function deleteGodownTransfers(int $id)
     {
-        GodownTransfer::where('purchase_id',$id)->delete();
+        GodownTransfer::where('purchase_id', $id)->delete();
+    }
+
+    public function seller()
+    {
+        return $this->belongsTo('App\Seller', 'seller_id');
+    }
+
+    public function godownTransfers()
+    {
+        return $this->hasMany('App\GodownTransfer');
+    }
+
+    public function allGoods()
+    {
+        $gt = GodownTransfer::where('purchase_id',$this->id)->groupBy('goods_id')->get();
+        $allGoods = [];
+        foreach ($gt as $transfer) {
+            array_push($allGoods, $transfer->goods);
+        }
+        return $allGoods;
     }
 
 }
 
 class PurchaseBuilder
 {
-    private $items,$puchase,$id;
+    private $items, $puchase, $id;
 
     public function __construct(int $id = null)
     {
         $this->id = $id;
-        $this->puchase = $id != null ? Purchase::findOrFail($id) :new Purchase();
+        $this->puchase = $id != null ? Purchase::findOrFail($id) : new Purchase();
         $this->items = [];
         /*foreach ($this->puchase->godownTransfers as $gt){
             $item = new \stdClass();
@@ -93,14 +98,14 @@ class PurchaseBuilder
         return $this;
     }
 
-    public function addItem(Godown $godown,Good $goods,int $quantity,float $cost)
+    public function addItem(Godown $godown, Good $goods, int $quantity, float $cost)
     {
         $item = new \stdClass();
         $item->godown = $godown;
         $item->goods = $goods;
         $item->quantity = $quantity;
         $item->cost = $cost;
-        array_push($this->items,$item);
+        array_push($this->items, $item);
         return $this;
     }
 
@@ -133,10 +138,10 @@ class PurchaseBuilder
         $id = $this->id;
         $purchase = $this->puchase;
         $items = $this->items;
-        Utility::runSqlSafely(function () use ($purchase,$items,$id) {
-            if($id != null) Purchase::deleteGodownTransfers($id);
+        Utility::runSqlSafely(function () use ($purchase, $items, $id) {
+            if ($id != null) Purchase::deleteGodownTransfers($id);
             $purchase->save();
-            foreach ($items as $item){
+            foreach ($items as $item) {
                 $gt = new GodownTransfer();
                 $gt->godown_id = $item->godown->id;
                 $gt->purchase_id = $purchase->id;
