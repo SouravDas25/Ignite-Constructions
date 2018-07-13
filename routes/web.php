@@ -23,6 +23,6 @@ Route::get('/admin/godowns/outgoing/{id}', 'GodownsController@outgoing')->name('
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/site-transfers/complete/{id}', 'SiteTransfersController@complete')->name('voyager.site-transfers.complete');
     Route::get('/site-transfers/confirm/{id}', 'SiteTransfersController@confirm')->name('voyager.site-transfers.confirm');
-    Voyager::routes();
+    Voyager::routes(); 
 });
 
