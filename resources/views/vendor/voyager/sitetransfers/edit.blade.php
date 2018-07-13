@@ -4,14 +4,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @stop
 
-@section('page_title','Add'.' '.'Site Transfer')
+@section('page_title','Edit'.' '.'Site Transfer')
 
 @section('page_header')
     <h1 class="page-title">
-        <i class="icon-paper-plane"></i>
-        Add Site Transfer
+        <i class="icon-switch"></i>
+        Edit Site Transfer
     </h1>
-
 @stop
 
 @section('content')
@@ -23,10 +22,11 @@
                     <!-- form start -->
                     <form role="form"
                           class="form-edit-add pr-3 pl-3"
-                          action="{{ route('voyager.site-transfers.store') }}"
+                          action="{{ route('voyager.site-transfers.update',$siteTransfer->id) }}"
                           method="POST" >
                         <!-- PUT Method if we are editing -->
 
+                        {{ method_field("PUT") }}
 
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
@@ -44,10 +44,18 @@
                             @endif
 
                             <div class="md-form">
+                                <select class="colorful-select dropdown-primary mdb-select" id="godown_id" name="godown_id">
+                                    @foreach($godowns as $godown)
+                                        <option value="{{ $godown->id }}"{{ isset($siteTransfer->godown()->id) && $siteTransfer->godown()->id== $godown->id  ? 'selected' : "" }}>{{ $godown->name }}</option>
+                                    @endforeach
+                                </select>
+                                <label>Godown</label>
+                            </div>
+
+                            <div class="md-form">
                                 <select class="colorful-select dropdown-primary mdb-select" id="good_id" name="good_id">
-                                    <option value="" selected disabled>Choose an Option</option>
                                     @foreach($goods as $good)
-                                        <option value="{{ $good->id }}">{{ $good->name }}</option>
+                                        <option value="{{ $good->id }}"{{ isset($siteTransfer->goods()->id) && $siteTransfer->goods()->id== $good->id  ? 'selected' : "" }}>{{ $good->name }}</option>
                                     @endforeach
                                 </select>
                                 <label>Goods Item</label>
@@ -55,24 +63,13 @@
 
                             <div class="form-group">
                                 <label for="quantity" >Quantity</label>
-                                <input type="number" id="quantity" name="quantity" class="form-control">
-                            </div>
-
-                            <div class="md-form">
-                                <select class="colorful-select dropdown-primary mdb-select" id="godown_id" name="godown_id">
-                                    <option value="" selected disabled>Choose an Option</option>
-                                    @foreach($godowns as $godown)
-                                        <option value="{{ $godown->id }}">{{ $godown->name }}</option>
-                                    @endforeach
-                                </select>
-                                <label>Godown</label>
+                                <input type="number" id="quantity" value="{{ $siteTransfer->transferQuantity() }}" name="quantity" class="form-control">
                             </div>
 
                             <div class="md-form">
                                 <select class="colorful-select dropdown-primary mdb-select" id="site_id" name="site_id">
-                                    <option value="" selected disabled>Choose an Option</option>
                                     @foreach($sites as $site)
-                                        <option value="{{ $site->id }}">{{ $site->name }}</option>
+                                        <option value="{{ $site->id }}"{{ isset($siteTransfer->id) && $siteTransfer->site->id== $site->id  ? 'selected' : "" }}>{{ $site->name }}</option>                                   
                                     @endforeach
                                 </select>
                                 <label>Site</label>
@@ -80,12 +77,16 @@
 
                             <div class="md-form">
                                 <select class="colorful-select dropdown-primary mdb-select" id="labour_id" name="labour_id">
-                                    <option value="" selected disabled>Choose an Option</option>
                                     @foreach($labours as $labour)
-                                        <option value="{{ $labour->id }}">{{ $labour->name }}</option>
+                                        <option value="{{ $labour->id }}"{{ isset($siteTransfer->id) && $siteTransfer->labour->id== $labour->id  ? 'selected' : "" }}>{{ $labour->name }}</option>
                                     @endforeach
                                 </select>
                                 <label>Labour</label>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="date" >Date</label>
+                                <input type="date" id="date" value="{{ $siteTransfer->date }}" name="date" class="form-control">
                             </div>
 
                         </div><!-- panel-body -->
@@ -133,6 +134,7 @@
         var params = {};
         $('document').ready(function () {
             $('.mdb-select').material_select();
+            $('.datepicker').pickadate();
         });
     </script>
 @stop

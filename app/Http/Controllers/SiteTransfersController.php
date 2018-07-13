@@ -9,6 +9,7 @@ use App\Site;
 use App\Labour;
 use App\Good;
 use App\SiteTransfer;
+use Carbon\Carbon;
 
 class SiteTransfersController extends Controller
 {
@@ -57,6 +58,43 @@ class SiteTransfersController extends Controller
         return view('vendor.voyager.sitetransfers.edit',compact('siteTransfer','godowns','sites','goods','labours'));
     }
 
+    public function update(Request $request, $id)
+    {
+        $rules = array(
+            'godown_id'=>'required|numeric',
+            'good_id' => 'required|numeric',
+            'site_id' => 'required|numeric',
+            'labour_id' => 'required|numeric',
+            'quantity' => 'required|numeric',
+            'date' => 'required|date'
+        );
+
+        $data = request()->validate($rules);
+
+        $siteTransfer = SiteTransfer::findOrFail($id);
+
+        $godown=$siteTransfer->godown();
+        $good=$siteTransfer->goods();
+        $transferQuantity=$siteTransfer->transferQuantity();
+
+        $requestGodown=Godown::find($data['godown_id']);
+        $requestGood=Good::find($data['good_id']);
+        $requestSite=Site::find($data['site_id']);
+        $requestLabour=Labour::find($data['labour_id']);
+        $requestDate=Carbon::parse($data['date']);
+
+        if($godown->id != $data['godown_id'] || $good->id != $data['good_id'] || $transferQuantity != $data['quantity'])
+        {
+            $siteTransfer->updateGoods($requestGodown,$requestGood,$data['quantity']);
+        }
+
+        if($siteTransfer->site->id != $data['site_id'] || $siteTransfer->labour->id != $data['labour_id'] || $siteTransfer->date != $data['date'])
+        {
+            $siteTransfer->updateTransfer($requestSite,$requestLabour,$requestDate);
+        }
+
+        return redirect()->route('voyager.site-transfers.index');
+    }
 
     public function create(Request $request)
     {

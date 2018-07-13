@@ -32,6 +32,7 @@ class CreateIgniteTables extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('details');
+
             $table->integer('unit_id')->unsigned()->index('fk_goods_units')->default('1');
             $table->timestamps();
             $table->foreign('unit_id', 'fk_goods_units')
