@@ -234,7 +234,7 @@
             }(window, document, 'script'));
         </script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.1.1/Chart.min.js"></script>
+        
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
         <script>
             // View Selector 2 JS

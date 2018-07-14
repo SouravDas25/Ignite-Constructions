@@ -91,11 +91,11 @@
                                             Change Status</a!-->
                                             <a class="btn btn-warning btn-sm pull-right"
                                             href="{{ route('voyager.site-transfers.show',['id'=>$transfer->id]) }}">
-                                                View Transfer
+                                                <i class="icon-eye"></i> View
                                             </a>
                                             <a class="btn btn-primary btn-sm pull-right"
                                                href="{{ route('voyager.site-transfers.edit',['id'=>$transfer->id]) }}">
-                                                Edit Transfer
+                                                <i class="icon-pencil-4"></i> Edit
                                             </a>
                                         </div>
                                     </td>

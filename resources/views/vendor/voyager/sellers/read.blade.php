@@ -80,26 +80,26 @@
         </div>
     </div>
     <div class="modal modal-danger fade" id="delete_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel"><b>Are you sure that you want to delete this seller?</b></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    
-                    <div class="modal-footer">
-                        <form action="{{ route('voyager.sellers.destroy' , ['id' => $seller->id ] ) }}" id="delete_form" method="POST">
-                            {{ method_field("DELETE") }}
-                            {{ csrf_field() }}
-                            <input type="submit" class="btn btn-danger hoverable" value="Delete this Seller">
-                        </form>
-                        <button type="button" class="btn btn-secondary btn-lg pull-right hoverable" data-dismiss="modal">Close</button>
-                    </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><b>Are you sure that you want to delete this seller?</b></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-footer">
+                    <form action="{{ route('voyager.sellers.destroy' , ['id' => $seller->id ] ) }}" id="delete_form" method="POST">
+                        {{ method_field("DELETE") }}
+                        {{ csrf_field() }}
+                        <input type="submit" class="btn btn-danger hoverable" value="Delete this Seller">
+                    </form>
+                    <button type="button" class="btn btn-secondary btn-lg pull-right hoverable" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
+    </div>
     {{-- Single delete modal --}}
 @stop
 
