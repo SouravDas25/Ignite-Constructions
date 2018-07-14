@@ -6,11 +6,18 @@
         <div class="analytics-container">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12 text-center pt-4">
-                        <h3><b>Welcome User</b></h3>
+                    <div class="col-lg-12  pt-4">
+                        <h3>
+                            <b class="text-center">Welcome User</b>
+                            <a class="btn btn-primary float-right" href="{{ setting('admin.app_download_url') }}">
+                                Download Ignite App
+                            </a>
+                        </h3>
                         <h5 class="pt-3">
-                            <small>Wish you a good day ahead</small>
+                            <small>Hope, you a good day ahead !  <b>{{ Auth::user()->name }}</b>
+                            </small>
                         </h5>
+
                     </div>
                 </div>
                 <hr>
