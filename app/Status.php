@@ -53,27 +53,9 @@ class Status extends Model
         return Status::find($id);
     }
 
-    public static function GODOWN()
-    {
-        $id = Status::statusID("GODOWN");
-        return Status::find($id);
-    }
-
-    public static function SITE()
-    {
-        $id = Status::statusID("SITE");
-        return Status::find($id);
-    }
-
     public static function COMPLETED()
     {
         $id = Status::statusID("COMPLETED");
-        return Status::find($id);
-    }
-
-    public static function ACTIVE()
-    {
-        $id = Status::statusID("ACTIVE");
         return Status::find($id);
     }
 }

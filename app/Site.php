@@ -18,6 +18,16 @@ class Site extends Model
         return $this->hasMany('App\SiteTransfer');
     }
 
+
+    public function totalCostOfGoods()
+    {
+        $totalCost = 0;
+        foreach ($this->siteTransfers as $transfer){
+            $totalCost += $transfer->getTransferCost();
+        }
+        return $totalCost;
+    }
+
     /**
      * @param string $name
      * @param Coordinates $location
