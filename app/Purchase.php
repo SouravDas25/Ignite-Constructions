@@ -4,10 +4,64 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Purchase extends Model
 {
     protected $fillable = ['seller_id', 'cost', 'date', 'purchase_due'];
+
+
+    /*
+     *
+     * RELATIONSHIPS
+     * */
+
+    public function seller()
+    {
+        return $this->belongsTo('App\Seller', 'seller_id');
+    }
+
+    public function godownTransfers()
+    {
+        return $this->hasMany('App\GodownTransfer');
+    }
+
+    /*
+     *
+     * MINING
+     *
+     *
+     * */
+
+    public  function allGoods()
+    {
+        $gt = GodownTransfer::where('purchase_id',$this->id)->groupBy('goods_id')->get();
+        $allGoods = [];
+        foreach ($gt as $transfer) {
+            array_push($allGoods, $transfer->goods);
+        }
+        return $allGoods;
+    }
+
+    public static function getAmountSpentOnMonth($month,$year)
+    {
+        $data = DB::select("SELECT SUM(cost*quantity) AS AMOUNT , MONTH(date) , YEAR(date) 
+                    FROM `godown_transfers` JOIN purchases ON purchase_id = purchases.id 
+                    WHERE MONTH(date) = $month AND YEAR(date) = $year");
+        if(count($data) > 0){
+            return $data[0]->AMOUNT ;
+        }
+        return 0;
+    }
+
+
+    /*
+     * CRUD FUNCTIONS
+     *
+     *
+     *
+     *
+     * */
 
     public static function newPurchase()
     {
@@ -38,25 +92,7 @@ class Purchase extends Model
         GodownTransfer::where('purchase_id', $id)->delete();
     }
 
-    public function seller()
-    {
-        return $this->belongsTo('App\Seller', 'seller_id');
-    }
 
-    public function godownTransfers()
-    {
-        return $this->hasMany('App\GodownTransfer');
-    }
-
-    public function allGoods()
-    {
-        $gt = GodownTransfer::where('purchase_id',$this->id)->groupBy('goods_id')->get();
-        $allGoods = [];
-        foreach ($gt as $transfer) {
-            array_push($allGoods, $transfer->goods);
-        }
-        return $allGoods;
-    }
 
 }
 

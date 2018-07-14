@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class SiteTransfer extends Model
 {
+    public static function activeTransfers()
+    {
+        return SiteTransfer::where('status_id',Status::CONFIRMED()->id)->get();
+    }
+
     public function site()
     {
         return $this->belongsTo('App\Site');
@@ -46,6 +51,15 @@ class SiteTransfer extends Model
     public function transferQuantity()
     {
         return $this->siteGodownTransfers->sum('quantity');
+    }
+
+    public function getTransferCost()
+    {
+        $transferCost = 0;
+        foreach ($this->siteGodownTransfers as $siteGodownTransfer){
+            $transferCost += $siteGodownTransfer->quantity * $siteGodownTransfer->godownTransfer->cost;
+        }
+        return $transferCost;
     }
 
     public function addActivity(int $js,string $title,string $details,$quantity = null)
@@ -114,13 +128,22 @@ class SiteTransfer extends Model
         return false;
     }
 
-    /**
-     * @return SiteTransfer
-     * @throws \Exception
-     */
-    public function activateTransfer()
+    /*
+     *
+     * MINING
+     *
+     * */
+
+    public static function getAmountTransferedOnMonth($month,$year)
     {
-        return $this->updateStatus(Status::ACTIVE());
+        $data = DB::select("SELECT SUM(godown_transfers.cost * site_godown_transfers.quantity) AS transferedAmount
+        FROM `site_godown_transfers` JOIN godown_transfers ON godown_transfers.id = site_godown_transfers.godown_transfer_id
+        JOIN site_transfers ON site_transfers.id = site_godown_transfers.site_transfer_id
+        WHERE MONTH(date) = $month AND YEAR(date) = $year");
+        if(count($data) > 0){
+            return $data[0]->transferedAmount ;
+        }
+        return 0;
     }
 
     /**
