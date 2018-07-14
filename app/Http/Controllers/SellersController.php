@@ -23,6 +23,8 @@ class SellersController extends VoyagerBaseController
     {
         $seller=Seller::findOrFail($id);
 
+        $colorArray=['red','pink','purple','deep-purple','indigo','blue','light-blue','cyan','teal','green','light-green','lime','amber','orange','deep-orange','brown','grey','blue-grey'];
+
         $badges = $seller->broughtGoods();
 
         //dd($badges);
