@@ -36,19 +36,19 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ $status_id == \App\Status::PENDING()->id ? 'active' : '' }}"
+                <a class="nav-link {{ $status_id == \App\Status::PENDING()->id ? 'active white-text' : '' }}"
                    href="{{ route('voyager.site-transfers.index',['status'=> \App\Status::PENDING()->id ]) }}" >
                     Pending
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ $status_id == \App\Status::CONFIRMED()->id ? 'active' : '' }}" role="tab"
+                <a class="nav-link {{ $status_id == \App\Status::CONFIRMED()->id ? 'active white-text' : '' }}" role="tab"
                    href="{{ route('voyager.site-transfers.index',['status'=> \App\Status::CONFIRMED()->id ]) }}" >
                     Confirmed
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ $status_id == \App\Status::COMPLETED()->id ? 'active' : '' }}"
+                <a class="nav-link {{ $status_id == \App\Status::COMPLETED()->id ? 'active white-text' : '' }}"
                    href="{{ route('voyager.site-transfers.index',['status'=> \App\Status::COMPLETED()->id ]) }}">
                     Completed
                 </a>
@@ -97,6 +97,29 @@
                                                href="{{ route('voyager.site-transfers.edit',['id'=>$transfer->id]) }}">
                                                 <i class="icon-pencil-4"></i> Edit
                                             </a>
+                                            <a class="btn btn-sm btn-danger hoverable" data-toggle="modal" data-target="#delete_Modal"><i class="icon-trash-empty pr-2"></i>Delete</a>
+
+                                            <div class="modal modal-danger fade" id="delete_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel"><b>Are you sure that you want to delete this transfer?</b></h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        <div class="modal-footer">
+                                                            <form action="{{ route('voyager.site-transfers.destroy' , ['id' => $transfer->id ] ) }}" id="delete_form" method="POST">
+                                                                {{ method_field("DELETE") }}
+                                                                {{ csrf_field() }}
+                                                                <input type="submit" class="btn btn-danger hoverable" value="Delete this Transfer">
+                                                            </form>
+                                                            <button type="button" class="btn btn-secondary btn-lg pull-right hoverable" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -107,6 +130,8 @@
                 </div>
             </div>
         </div>
+
+        
 
 
         <div class="modal modal-warning fade" id="changeStatus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
