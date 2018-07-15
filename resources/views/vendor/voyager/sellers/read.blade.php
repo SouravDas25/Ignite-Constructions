@@ -21,7 +21,7 @@
   
 
     <div class="container pt-4">
-        <div class="row">
+        <div class="row mb-4">
             <div class="col-sm-12 col-md-6 col-lg-5">
                 <h3 class="pl-3"><b>{{$seller->name}}</b></h3>
 
