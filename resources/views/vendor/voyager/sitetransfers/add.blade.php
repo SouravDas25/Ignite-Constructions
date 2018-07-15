@@ -170,7 +170,7 @@
 
                             <input type="hidden" name="transferList" id="transferList">
 
-                        </div><!-- panel-body -->
+                        </div><!-- card-body -->
 
                         <div class="card-footer grey">
                             <div class="col-md-12 pt-3">

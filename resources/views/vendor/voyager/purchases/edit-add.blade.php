@@ -31,7 +31,7 @@
         <div class="row">
             <div class="col-md-12">
 
-                <div class="panel panel-bordered ">
+                <div class="card card-bordered ">
                     <!-- form start -->
                     <form role="form" id="VueApp"
                           class="form-edit-add pr-3 pl-3 pt-4"
@@ -45,7 +45,7 @@
                     <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
 
-                        <div class="panel-body">
+                        <div class="card-body">
 
                             @if (count($errors) > 0)
                                 <div class="alert alert-danger" role="alert">
@@ -178,7 +178,7 @@
                             </div>
                         </div>
 
-                        <div class="panel-footer form-group pt-4">
+                        <div class="card-footer form-group pt-4">
                             <button type="button" onclick="submitForm()"
                                     class="btn btn-primary btn-lg waves-effect waves-light ">
                                 <i class="icon-flash"></i> {{__('voyager::generic.save') }}

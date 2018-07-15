@@ -15,12 +15,12 @@
             Complete Transfer
         </a>
     @endif
-    <div class="float-right page-title">
+    <div class="float-right p-2">
         Status :
         <span class="badge badge-primary"> {{ $siteTransfer->status->details }}</span>
     </div>
-    <div class="float-right page-title">
-        Labour : {{ $siteTransfer->labour->name }}
+    <div class="float-right p-2">
+        Labour : <b>{{ $siteTransfer->labour->name }}</b>
     </div>
     <style>
         #map {
@@ -53,9 +53,9 @@
 @stop
 
 @section('content')
-    <div class="page-content read container-fluid">
-        <div class="row">
-            <div class="col-xl-5 col-md-5 mb-4 ">
+    <div class="">
+        <div class="row w-100 mx-0">
+            <div class="col-sm-5  mb-4 ">
                 @component('includes.infoCard',[
                 'infoCardName' => 'Godown',
                 'infoCardTitle' => $siteTransfer->godown()->name,
@@ -65,7 +65,7 @@
                 ])
                 @endcomponent
             </div>
-            <div class="col-xl-2 col-md-2 mb-4 ">
+            <div class="col-sm-2  mb-4 ">
                 <div style="font-size:15px" class="row font-weight-600 text-center my-5 Center-Container">
                     <div class="col-sm-12" id="distanceGS">
                         40 KM
@@ -78,7 +78,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-5 col-md-5 mb-4 ">
+            <div class="col-sm-5 mb-4 ">
                 @component('includes.infoCard',[
                 'infoCardName' => 'Site',
                 'infoCardTitle' => $siteTransfer->site->name,

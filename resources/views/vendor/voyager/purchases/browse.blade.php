@@ -24,19 +24,6 @@
         @endcan
         @include('voyager::multilingual.language-selector')
     </div>
-    <style>
-        .select2-container {
-            min-width : 100px !important;
-            width : 100%;
-        }
-        #search-input{
-            border : 0;
-        }
-
-        #search-input input {
-            border: 1px black !important;
-        }
-    </style>
 @stop
 
 @section('content')
@@ -44,8 +31,8 @@
         @include('voyager::alerts')
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-bordered">
-                    <div class="panel-body">
+                <div class="card card-bordered">
+                    <div class="card-body">
                         @if ($isServerSide)
                             <form method="get" class="form-search ">
                                 <div id="search-input" class="form-row">
@@ -62,13 +49,17 @@
                                             <option value="equals" @if($search->filter == "equals"){{ 'selected' }}@endif>=</option>
                                         </select>
                                     </div>
-                                    <div class=" col-sm-8" >
-                                        <input type="text" class="col-sm-8 pb-2 grey lighten-4"
-                                               placeholder="{{ __('voyager::generic.search') }}"
-                                               name="s" value="{{ $search->value }}">
-                                        <button class="btn btn-info btn-lg" type="submit">
-                                            <i class="voyager-search"></i>
-                                        </button>
+                                    <div class="col-md-8">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <input type="text" class="p-2 form-control"
+                                                   placeholder="{{ __('voyager::generic.search') }}"
+                                                   name="s" value="{{ $search->value }}">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-info btn-lg m-0 px-4" type="submit">
+                                                    <i class="voyager-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </form>

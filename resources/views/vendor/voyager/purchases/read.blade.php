@@ -26,8 +26,8 @@
     <div class="container-fluid pt-5">
         <div class="row">
             <div class="col-lg-12">
-                <div class="panel panel-bordered">
-                    <div class="panel-body">
+                <div class="card card-bordered">
+                    <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec5c8977a4bb0ab8abb402e41ac0f6d8",
+    "content-hash": "1f48e38a46d3a68f040ef73895724e45",
     "packages": [
         {
             "name": "arrilot/laravel-widgets",
@@ -2462,17 +2462,17 @@
             "time": "2018-01-20T00:28:24+00:00"
         },
         {
-            "name": "sd25/voyager",
-            "version": "v1.2.5",
+            "name": "sd25/extended-voyager",
+            "version": "v1.2.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/SouravDas25/voyager.git",
-                "reference": "967c629b10874066d09a38c90a67e30a401992a0"
+                "url": "https://github.com/SouravDas25/Extended-Voyager.git",
+                "reference": "0a176a754d595df8689882c654dbedeaa9585766"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SouravDas25/voyager/zipball/967c629b10874066d09a38c90a67e30a401992a0",
-                "reference": "967c629b10874066d09a38c90a67e30a401992a0",
+                "url": "https://api.github.com/repos/SouravDas25/Extended-Voyager/zipball/0a176a754d595df8689882c654dbedeaa9585766",
+                "reference": "0a176a754d595df8689882c654dbedeaa9585766",
                 "shasum": ""
             },
             "require": {
@@ -2526,7 +2526,7 @@
                 "laravel",
                 "panel"
             ],
-            "time": "2018-07-13T15:23:58+00:00"
+            "time": "2018-07-15T14:47:06+00:00"
         },
         {
             "name": "seld/cli-prompt",

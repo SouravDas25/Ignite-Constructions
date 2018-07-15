@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-md-12">
 
-                <div class="panel panel-bordered">
+                <div class="card card-bordered">
                     <!-- form start -->
                     <form role="form"
                           class="form-edit-add pr-3 pl-3"
@@ -31,7 +31,7 @@
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
 
-                        <div class="panel-body">
+                        <div class="card-body">
 
                             @if (count($errors) > 0)
                                 <div class="alert alert-danger">
@@ -89,9 +89,9 @@
                                 <input type="date" id="date" value="{{ $siteTransfer->date }}" name="date" class="form-control">
                             </div>
 
-                        </div><!-- panel-body -->
+                        </div><!-- card-body -->
 
-                        <div class="panel-footer">
+                        <div class="card-footer">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary btn-lg mx-0 save">{{ __('voyager::generic.save') }}</button>
