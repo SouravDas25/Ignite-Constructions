@@ -68,7 +68,7 @@
                         @endif
                         <div class="table-responsive">
                             <table id="dataTable" class="table table-hover">
-                                <thead>
+                                <thead class="grey darken-3 white-text">
                                     <tr>
                                         @can('delete',app($dataType->model_name))
                                             <th>

@@ -22390,7 +22390,7 @@ table.table td, table.table th {
 
 table.table a {
   margin: 0;
-  color: #212529;
+  color : inherit;
 }
 
 table.table .label-table {

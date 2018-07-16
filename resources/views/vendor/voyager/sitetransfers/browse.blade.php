@@ -97,12 +97,35 @@
                                                href="{{ route('voyager.site-transfers.edit',['id'=>$transfer->id]) }}">
                                                 Edit Transfer
                                             </a>
+                                            <a class="btn btn-sm btn-danger hoverable" data-toggle="modal" data-target="#delete_Modal"><i class="icon-trash-empty pr-2"></i>Delete</a>
                                         </div>
                                     </td>
                                 </tr>
                             @endforeach
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal modal-danger fade" id="delete_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"><b>Are you sure that you want to delete this transfer?</b></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-footer">
+                        <form action="{{ route('voyager.site-transfers.destroy' , ['id' => $transfer->id ] ) }}" id="delete_form" method="POST">
+                            {{ method_field("DELETE") }}
+                            {{ csrf_field() }}
+                            <input type="submit" class="btn btn-danger" value="Delete this Transfer">
+                        </form>
+                        <button type="button" class="btn btn-secondary pull-right" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

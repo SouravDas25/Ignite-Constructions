@@ -137,4 +137,18 @@ class SiteTransfersController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
+    public function destroy(Request $request, $id)
+    {
+        SiteTransfer::findOrFail($id);
+        SiteTransfer::destroyTransfer($id);
+        return redirect()->route('voyager.site-transfers.index');
+    }
+
+
 }

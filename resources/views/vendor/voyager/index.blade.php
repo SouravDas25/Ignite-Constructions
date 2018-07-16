@@ -5,11 +5,12 @@
     <div class="row w-100">
         <div class="col-md-8  pt-4">
             <h3>
-                <b class="text-center">Welcome {{ ucfirst(Auth::user()->name )}}</b>
+                Welcome {{ ucfirst(Auth::user()->name )}}
             </h3>
             <h5 class="pt-3">
-                <small>Hope, you a good day ahead !  <b>{{ Auth::user()->name }}</b>
-                </small>
+                <b>
+                    Hope, you have a good day ahead !
+                </b>
             </h5>
         </div>
         <div class="col-md-4">
