@@ -41,14 +41,14 @@
         </div>
     </div>
 
-    <div class="page-content read container-fluid">
+    <div class="page-content read container-fluid pt-5">
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-bordered">
                     <div class="panel-body">
                         <div class="table-responsive">
                             <table id="dataTable" class="table table-hover">
-                                <thead>
+                                <thead class="grey white-text">
                                     <tr>
                                         <th>Goods Item</th>
                                         <th>Quantity</th>

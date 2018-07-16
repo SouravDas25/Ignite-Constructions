@@ -8,13 +8,13 @@
                 <div class="row">
                     <div class="col-lg-12  pt-4">
                         <h3>
-                            <b class="text-center">Welcome {{ Auth::user()->name }}</b>
+                            Welcome {{ Auth::user()->name }}
                             <a class="btn btn-primary float-right" href="{{ setting('admin.app_download_url') }}">
                                 Download Ignite App
                             </a>
                         </h3>
                         <h5 class="pt-3">
-                            <small>Hope, you a good day ahead !</b>
+                            <small><b>Hope, you a good day ahead !</b>
                             </small>
                         </h5>
 
@@ -60,21 +60,21 @@
                         </div>
                     </div>
                 </div>
-                @foreach(\App\SiteTransfer::activeTransfers() as $transfer)
+                @if(count(\App\SiteTransfer::activeTransfers())>0)
                     <div class="row mt-4">
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-header blue white-text">
                                     <h4><b>Active Site Transfers</b></h4>
                                 </div>
-                                <div class="list-group">
-                                    <style>
-                                        dd {
-                                            display: block;
-                                            margin-left: 40px;
-                                        }
-                                    </style>
-                                    
+                                @foreach(\App\SiteTransfer::activeTransfers() as $transfer)
+                                    <div class="list-group">
+                                        <style>
+                                            dd {
+                                                display: block;
+                                                margin-left: 40px;
+                                            }
+                                        </style>
                                         <a href="{{ route('voyager.site-transfers.show',['id'=>$transfer->id]) }}" class="list-group-item list-group-item-action flex-column align-items-start ">
                                             <div class="d-flex w-100 justify-content-between">
                                                 <h4>
@@ -115,12 +115,12 @@
                                             </dl>
                                             <small>Donec id elit non mi porta.</small>
                                         </a>
-                                    
-                                </div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
-                @endforeach
+                @endif
             </div>
         </div>
     </div>

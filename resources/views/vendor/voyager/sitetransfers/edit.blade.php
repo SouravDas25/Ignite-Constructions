@@ -126,7 +126,6 @@
             </div>
         </div>
     </div>
-    <!-- End Delete File Modal -->
 @stop
 
 @section('javascript')

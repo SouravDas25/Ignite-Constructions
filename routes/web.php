@@ -15,6 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/admin/documentation', function () {
+    return view('vendor.voyager.documentation');
+});
 
 Route::get('/test', function () {
     $goods = \App\Good::find(2);
