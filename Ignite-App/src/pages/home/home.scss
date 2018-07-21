@@ -1,0 +1,25 @@
+page-home {
+    #map {
+        height: 100%;
+      }
+
+      .item {
+        border-bottom: 1px solid #dedede;
+      }
+      .list-md .item-block .item-inner{
+        border-bottom:0;
+      }
+
+      
+      .toolbar-background-md{
+        background-color: #488aff;
+      }
+        .segment-md .segment-button.activated, .segment-md .segment-button.segment-activated{
+            border-color: whitesmoke;
+        }
+
+        .segment-md .segment-button{
+            color : whitesmoke;
+        }
+    
+}

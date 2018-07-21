@@ -1,0 +1,66 @@
+<ion-header>
+	<ion-navbar color="primary">
+		<ion-title>
+			<ion-icon name="checkmark" class="pr-2" item-left></ion-icon>
+			Conformation
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+<ion-content padding id="page5" class="grey lighten-3">
+	<div class="text-center" *ngIf="showLoader">
+		<ion-spinner name="crescent" center></ion-spinner>
+		<h2>fetching data</h2>
+	</div>
+	<ion-card id="conformation-card22" *ngIf="hasJob && !showLoader">
+		<ion-list>
+			<ion-item color="positive" id="conformation-list-item11">
+				<ion-avatar item-left>
+					<img src="assets/img/g4qqIXHIT1GuitV7KPlb_USER7-512.png" />
+				</ion-avatar>
+				<h2>
+					Job Confirmation
+				</h2>
+				<small>Do you confirm the Job ?</small>
+			</ion-item>
+			<div #cmap id="cmap" style="height:220px">
+			</div>
+			<ion-item>
+				<small>Distance - <span class="font-weight-bold" #distanceMetric> {{ GSMetric.distance }}</span> </small><br>
+				<small>Duration - <span class="font-weight-bold" #durationMetric >{{ GSMetric.duration }}</span> </small>
+			</ion-item>
+			<ion-item id="conformation-list-item-container4">
+				<small>Godown</small>
+				<br> {{ godown.name }}
+				<p style="font-size: 10px">
+					{{ godown.address }}
+				</p>
+			</ion-item>
+			<ion-item id="conformation-list-item-container4">
+				<small>Site</small>
+				<br> {{ site.name }}
+				<p style="font-size: 10px">
+					{{ site.address }}
+				</p>
+			</ion-item>
+			<ion-item id="conformation-list-item-container4" class="mb-4">
+				<small>Goods</small>
+				<br> {{ goods.name }} - {{ goods.quantity }} <small>unit</small>
+				<p style="font-size: 10px">
+					{{ goods.details }}
+				</p>
+			</ion-item>
+			<button ion-item color="secondary" outline id="conformation-list-item12" (click)="confirm()">
+				<ion-icon name="checkmark" item-left></ion-icon>
+				Confirm Job
+			</button>
+		</ion-list>
+	</ion-card>
+	<div class="text-center" *ngIf="!hasJob && !showLoader">
+		<p style="font-size: 20px" class="my-5">
+			Currently No job is available for you.
+		</p>
+		<button ion-button color="positive" large (click)="logout()">
+			Please logout
+		</button>
+	</div>
+</ion-content>

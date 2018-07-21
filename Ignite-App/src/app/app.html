@@ -1,0 +1,26 @@
+<ion-menu [content]="content">
+  <ion-header>
+    <ion-toolbar color="primary" style="min-height:150px">
+      <button ion-button icon-only menuToggle class="fa-2x">
+        <ion-icon name="flame"></ion-icon>
+      </button>
+      <ion-title>IGNiTE</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <ion-item style="font-size:20px">
+        <ion-icon name="person" class="col-2 ml-3 my-4"></ion-icon> {{ labour.userName | uppercase }}
+      </ion-item>
+      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+        <ion-icon [name]="p.icon" class="col-2 ml-3"></ion-icon>
+        {{p.title}}
+      </button>
+    </ion-list>
+  </ion-content>
+
+</ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
