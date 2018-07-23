@@ -23,6 +23,12 @@ It is and Inventory Management and Tracking System for small scale business.
 
 
 
+## Tracking Hybrid App  
+#### Tracking App for the drivers.
+![Tracking Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/Ionic-App.gif)
+
+
+
 ## Godown 
 #### CRUDing Godown to the database.
 [click to view Godown Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/godown.gif)
@@ -46,9 +52,5 @@ It is and Inventory Management and Tracking System for small scale business.
 #### Inserting payments for each site.
 [click to view Payments Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/purchase.gif)
 
-
-## Tracking Hybrid App  
-#### Tracking App for the drivers.
-![Tracking Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/Ionic-App.gif)
 
 
