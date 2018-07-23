@@ -15,17 +15,17 @@ It is and Inventory Management and Tracking System for small scale business.
 ![Login Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/login.gif)
 
 
+## Tracking Hybrid App  
+#### Tracking App for the drivers.
+![Tracking Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/Ionic-App.gif)
+
+
 
 ## Dashboard 
 #### Charts provided by Chart JS.
 
-![Dashboard Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/dashboard.gif)
+[click to view Dashboard Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/dashboard.gif)
 
-
-
-## Tracking Hybrid App  
-#### Tracking App for the drivers.
-![Tracking Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/Ionic-App.gif)
 
 
 
