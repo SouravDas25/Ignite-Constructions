@@ -10,7 +10,7 @@ It is and Inventory Management and Tracking System for small scale business.
 - Material Theme.
 
 ## Login 
-#### No frontend only Admin-backend Login.
+#### Admin-backend Login.
 
 ![Login Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/login.gif)
 
