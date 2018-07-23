@@ -10,37 +10,47 @@ It is and Inventory Management and Tracking System for small scale business.
 - Material Theme.
 
 ## Login 
+#### No frontend only Admin-backend Login.
+
 ![Login Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/login.gif)
 
-No frontend only Admin-backend Login.
 
 
 ## Dashboard 
+#### Charts provided by Chart JS.
+
 ![Dashboard Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/dashboard.gif)
 
-Charts provided by Chart JS.
 
-## Godown 
-![Godown Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/godown.gif)
-
-CRUDing Godown to the database.
-
-## Purchase 
-![Purchase Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/purchase.gif)
-
-Purchasing Goods to insert it into the Inventory.
-
-## Transfer 
-![Transfer Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/Viewing-Site-Transfers.gif)
-
-Transfering goods from the inventory to the working site or warehouse.
-
-## Payments 
-![Payments Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/purchase.gif)
-
-Inserting payments for each site.
 
 ## Tracking Hybrid App  
+#### Tracking App for the drivers.
 ![Tracking Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/Ionic-App.gif)
 
-Tracking App for the drivers.
+
+
+## Godown 
+#### CRUDing Godown to the database.
+[click to view Godown Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/godown.gif)
+
+
+
+
+## Purchase 
+#### Purchasing Goods to insert it into the Inventory.
+[click to view Purchase Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/purchase.gif)
+
+
+
+## Transfer 
+#### Transfering goods from the inventory to the working site or warehouse.
+[click to view Transfer Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/Viewing-Site-Transfers.gif)
+
+
+
+## Payments 
+#### Inserting payments for each site.
+[click to view Payments Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/purchase.gif)
+
+
+
