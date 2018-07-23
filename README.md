@@ -32,13 +32,13 @@ It is and Inventory Management and Tracking System for small scale business.
 
 ## Purchase 
 #### Purchasing Goods to insert it into the Inventory.
-[click to view Purchase  Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/purchase.gif)
+[click to view Purchase Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/purchase.gif)
 
 
 
 ## Transfer 
 #### Transfering goods from the inventory to the working site or warehouse.
-![Transfer Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/Viewing-Site-Transfers.gif)
+[click to view Transfer Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/Viewing-Site-Transfers.gif)
 
 
 
@@ -48,6 +48,7 @@ It is and Inventory Management and Tracking System for small scale business.
 
 
 ## Tracking Hybrid App  
+#### Tracking App for the drivers.
 ![Tracking Animation](https://github.com/SouravDas25/Ignite-Constructions/blob/master/gifs/Ionic-App.gif)
 
-Tracking App for the drivers.
+
