@@ -1,0 +1,59 @@
+<!--
+  Generated template for the SettingsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Settings</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+
+  <ion-list>
+    <ion-item-group>
+      <ion-item-divider color="light">Location</ion-item-divider>
+      <ion-item>
+        <ion-icon name="locate" item-start></ion-icon>
+        <ion-label>Refresh Rate</ion-label>
+        <ion-select [(ngModel)]="settings.location_refresh_rate">
+          <ion-option value="500">Twice per Second </ion-option>
+          <ion-option value="1000">Once per Second </ion-option>
+          <ion-option value="1000*60">Once per Minute </ion-option>
+          <ion-option value="1000*60*30">Once per 30 Minutes</ion-option>
+          <ion-option value="1000*60*60">Once per Hour</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-item-group>
+
+    <ion-item-group>
+      <ion-item-divider color="light">User</ion-item-divider>
+      <button ion-item (click)="presentConfirm('Reset',reset)">
+        <ion-icon name="trash" class="col-2 ml-3"></ion-icon>Reset
+      </button>
+      <button ion-item (click)="presentConfirm('Logout',logout)">
+        <ion-icon name="log-out" class="col-2 ml-3"></ion-icon>Logout
+      </button>
+    </ion-item-group>
+
+    <ion-item-group>
+      <ion-item-divider color="light">Save Settings</ion-item-divider>
+      <ion-item>
+        <button ion-button color="primary" block large>
+          <ion-icon name="save"></ion-icon>
+          Save
+        </button>
+      </ion-item>
+    </ion-item-group>
+
+  </ion-list>
+
+</ion-content>
